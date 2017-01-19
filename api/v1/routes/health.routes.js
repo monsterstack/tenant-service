@@ -16,3 +16,4 @@ module.exports = (app) => {
    *        description: Health
    */
   app.get('/health', controller.getHealth(app));
+}
