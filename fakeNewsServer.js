@@ -29,8 +29,8 @@ const main = () => {
 
   let Server = require('core-server').Server;
   let server = new Server(announcement.name, announcement, {
-    discoveryHost: '0.0.0.0',
-    discoveryPort: 7616,
+    discoveryHost: config.discovery.host,
+    discoveryPort: config.discovery.port,
     useRandomWorkerPort: useRandomWorkerPort
   });
 
