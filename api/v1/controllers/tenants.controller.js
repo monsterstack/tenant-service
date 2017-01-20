@@ -28,5 +28,19 @@ const getTenant = (app) => {
   }
 }
 
+const saveTenant = (app) => {
+  return (req, res) => {
+    var tenant = req.body;
+     tenantModel.saveTenant(tenant).then((result) => {
+       console.log(result);
+       res.status(HttpStatus.OK).send(result);
+     }).catch((err) => {
+       assert(err === null, "Failure did not occur");
+       done();
+    });
+  }
+}
+
 /* Public */
 exports.getTenant = getTenant;
+exports.saveTenant = saveTenant;
