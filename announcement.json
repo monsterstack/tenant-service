@@ -3,5 +3,5 @@
   "region": "us-east-1",
   "stage": "dev",
   "version": "v1",
-  "docsPath": "http://cloudfront.mydocs.com/discovery"
+  "docsPath": "http://cloudfront.mydocs.com/tenant"
 }
