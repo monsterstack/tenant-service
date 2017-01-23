@@ -1,40 +1,65 @@
 'use strict';
 
-var async = require('async');
-var glob = require('glob');
-var fs = require('fs');
-var optimist = require('optimist');
-var app = require('express')();
-const Promise = require('promise');
+const config = require('config');
+const optimist = require('optimist');
+const express = require('express');
+const path = require('path');
 
-function main(){
+const main = () => {
+  let announce = false;
+  let useRandomWorkerPort = false;
+  let announcement = require('./announcement.json');
 
-  app.listen(3000, function () {
-    console.log('Tenant Service listening on port 3000!')
-  })
+  // Handle Arguments
+  if(optimist.argv.randomWorkerPort === 'true') {
+    useRandomWorkerPort = true;
+  }
 
-     var startup = require('./libs/startup.js');
+  if(optimist.argv.announce === 'true') {
+    announce = true;
+  }
 
+  if(optimist.argv.region) {
+    announcement.region = optimist.argv.region;
+  }
 
-     /* Http Routes */
-     startup.loadHttpRoutes(app);
+  if(optimist.argv.stage) {
+    announcement.stage = optimist.argv.stage;
+  }
+
+  let Server = require('core-server').Server;
+  let server = new Server(announcement.name, announcement, {
+    discoveryHost: config.discovery.host,
+    discoveryPort: config.discovery.port,
+    useRandomWorkerPort: useRandomWorkerPort
+  });
+
+  /** Init and handle lifecycle **/
+  server.init().then(() => {
+    let app = server.getApp();
+    // Set View Engine and Static Paths
+    app.set('view engine', 'ejs');
+    app.use('/portal', express.static(path.join(__dirname + '/portal')));
+    app.use('/public', express.static(path.join(__dirname, 'public')));
+
+    server.loadHttpRoutes();
+    server.listen().then(() => {
+      console.log('Up and running..');
+      if(announce === true) {
+        server.announce();
+      }
+    });
+  });
+
+  process.on('message', function(msg, socket) {
+      if (msg !== 'sticky-session:connection') return;
+      // Emulate a connection event on the server by emitting the
+      // event with the connection the master sent us.
+      server.getHttp().emit('connection', socket);
+  });
 }
 
-/**
- * Kick off main if not included as import via require
- */
-if (require.main === module) {
-    var d = require('domain').create();
-    d.on('error', function(er) {
-        // The error won't crash the process, but what it does is worse!
-        // Though we've prevented abrupt process restarting, we are leaking
-        // resources like crazy if this ever happens.
-        // This is no better than process.on('uncaughtException')!
-        setTimeout(function() {
-            logger.error(er);
-            logger.error('Shutting Down Gracefully');
-            process.exit();
-        }, 2000);
-    });
-    d.run(main);
-};
+
+if(require.main === module) {
+  main();
+}

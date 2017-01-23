@@ -2,7 +2,7 @@
 const HttpStatus = require('http-status');
 const tenantModel = require('tenant-model').model;
 const Error = require('../../error.js');
-
+const Tenant = tenantModel.Tenant;
 /**
  * Build Page Descriptor
  */
@@ -30,7 +30,8 @@ const getTenant = (app) => {
 
 const saveTenant = (app) => {
   return (req, res) => {
-    var tenant = req.body;
+    var tenant = new Tenant(req.body);
+    console.log(tenant);
      tenantModel.saveTenant(tenant).then((result) => {
        console.log(result);
        res.status(HttpStatus.OK).send(result);

@@ -2,42 +2,26 @@
   "name": "tenant-service",
   "version": "1.0.0",
   "description": "",
-<<<<<<< HEAD
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-=======
-  "main": "fakeNewsServer.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zacharyrote/tenant-service.git"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/zacharyrote/tenant-service/issues"
   },
   "homepage": "https://github.com/zacharyrote/tenant-service#readme",
->>>>>>> fb81b58ca41c2707b8d13a8c63e4eec2886d5b8e
+
   "dependencies": {
     "app-root-path": "^2.0.1",
     "async": "^2.1.4",
     "babel-cli": "^6.18.0",
     "babel-preset-node6": "^11.0.0",
-<<<<<<< HEAD
-    "bronto": "^0.1.0",
-    "coffee-script": "^1.12.2",
-    "config": "^1.24.0",
-    "connect": "2.x",
-    "debug": "^2.5.1",
-    "tenant-model": "https://github.com/zacharyrote/tenant-model#development",
-=======
     "coffee-script": "^1.12.2",
     "config": "^1.24.0",
     "connect": "2.x",
@@ -46,7 +30,7 @@
     "discovery-proxy": "https://github.com/zacharyrote/discovery-proxy#development",
     "core-server": "https://github.com/zacharyrote/core-server#development",
     "ejs": "^2.5.5",
->>>>>>> fb81b58ca41c2707b8d13a8c63e4eec2886d5b8e
+    "tenant-model": "https://github.com/zacharyrote/tenant-model#development",
     "express": "^4.14.0",
     "external-ip": "^0.2.4",
     "glob": "^7.1.1",
@@ -55,10 +39,7 @@
     "needle": "^1.4.3",
     "node-uuid": "^1.4.7",
     "optimist": "^0.6.1",
-<<<<<<< HEAD
-=======
     "redis": "^2.6.4",
->>>>>>> fb81b58ca41c2707b8d13a8c63e4eec2886d5b8e
     "remote-events": "^1.1.4",
     "request": "^2.79.0",
     "sha1": "^1.1.1",
