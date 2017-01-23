@@ -1,13 +1,14 @@
 {
   "name": "tenant-service",
   "version": "1.0.0",
-  "description": "",
+  "description": "Tenant Service",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zacharyrote/tenant-service.git"
@@ -22,6 +23,12 @@
     "async": "^2.1.4",
     "babel-cli": "^6.18.0",
     "babel-preset-node6": "^11.0.0",
+
+    "coffee-script": "^1.12.2",
+    "config": "^1.24.0",
+    "connect": "2.x",
+    "debug": "^2.5.1",
+    "tenant-model": "https://github.com/zacharyrote/tenant-model#development",
     "coffee-script": "^1.12.2",
     "config": "^1.24.0",
     "connect": "2.x",
@@ -30,7 +37,6 @@
     "discovery-proxy": "https://github.com/zacharyrote/discovery-proxy#development",
     "core-server": "https://github.com/zacharyrote/core-server#development",
     "ejs": "^2.5.5",
-    "tenant-model": "https://github.com/zacharyrote/tenant-model#development",
     "express": "^4.14.0",
     "external-ip": "^0.2.4",
     "glob": "^7.1.1",
