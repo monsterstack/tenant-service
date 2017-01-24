@@ -8,7 +8,6 @@
   },
   "author": "",
   "license": "ISC",
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zacharyrote/tenant-service.git"
@@ -17,25 +16,18 @@
     "url": "https://github.com/zacharyrote/tenant-service/issues"
   },
   "homepage": "https://github.com/zacharyrote/tenant-service#readme",
-
   "dependencies": {
     "app-root-path": "^2.0.1",
     "async": "^2.1.4",
     "babel-cli": "^6.18.0",
     "babel-preset-node6": "^11.0.0",
-
     "coffee-script": "^1.12.2",
     "config": "^1.24.0",
     "connect": "2.x",
-    "debug": "^2.5.1",
-    "tenant-model": "https://github.com/zacharyrote/tenant-model#development",
-    "coffee-script": "^1.12.2",
-    "config": "^1.24.0",
-    "connect": "2.x",
-    "cors": "^2.8.1",
-    "debug": "^2.5.1",
-    "discovery-proxy": "https://github.com/zacharyrote/discovery-proxy#development",
     "core-server": "https://github.com/zacharyrote/core-server#development",
+    "cors": "^2.8.1",
+    "debug": "^2.6.0",
+    "discovery-proxy": "https://github.com/zacharyrote/discovery-proxy#development",
     "ejs": "^2.5.5",
     "express": "^4.14.0",
     "external-ip": "^0.2.4",
@@ -53,6 +45,7 @@
     "socket.io-client": "^1.7.2",
     "socket.io-redis": "^2.0.1",
     "socketio-auth": "^0.1.0",
+    "tenant-model": "https://github.com/zacharyrote/tenant-model#development",
     "winston": "^2.3.0"
   }
 }
