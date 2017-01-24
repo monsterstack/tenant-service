@@ -10,8 +10,12 @@ class TenantService {
     return model.findTenant(id);
   }
 
-  findTenants(search, page, size, sort) {
-    return model.findTenants(search, page, size, sort);
+  findTenants(search, pageDescriptor) {
+    if(search) {
+      return model.findTenants(search, pageDescriptor.page, pageDescriptor.size, 'asc');
+    } else {
+      return model.allTenants(pageDescriptor.page, pageDescriptor.size, 'asc');
+    }
   }
 
   saveTenant(tenant) {

@@ -23,7 +23,7 @@ const getTenant = (app) => {
   return (req, res) => {
     let id = req.params.id;
     // validate id requirements.  If invalid return BAD_REQUEST
-    
+
     let tenantService = new TenantService();
     tenantService.findTenantById(id).then((result) => {
        console.log(result);
@@ -42,6 +42,7 @@ const findTenants = (app) => {
     let query = url_parts.query;
 
     let pageDescriptor = buildPageDescriptor(query);
+    let search = query.search;
     let tenantService = new TenantService();
 
     tenantService.findTenants(search, pageDescriptor).then((page) => {
@@ -51,6 +52,7 @@ const findTenants = (app) => {
     });
   }
 }
+
 const saveTenant = (app) => {
   return (req, res) => {
     let tenant = req.body;
@@ -67,3 +69,4 @@ const saveTenant = (app) => {
 /* Public */
 exports.getTenant = getTenant;
 exports.saveTenant = saveTenant;
+exports.findTenants = findTenants;
