@@ -6,7 +6,7 @@ const controller = require('../controllers/tenants.controller.js');
 module.exports = function(app) {
   /**
    * @swagger
-   * /tenants/:id
+   * /tenants/{id}:
    *  get:
    *    description: Get Tenant By Id
    *    produces:
@@ -26,7 +26,7 @@ module.exports = function(app) {
   app.get('/api/v1/tenants/:id', controller.getTenant(app));
   /**
    * @swagger
-   * /tenants
+   * /tenants:
    *  get:
    *    description: Get Page of Tenant(s)
    *    produces:
@@ -57,7 +57,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /tenants
+   * /tenants:
    *  post:
    *    description: Save Tenant
    *    produces:

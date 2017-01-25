@@ -1,1 +1,232 @@
-{}
+{
+  "info": {
+    "title": "Tenant Service",
+    "description": "This service is responsible for segmenting service configuration between distinct client applications",
+    "version": "1.0.0"
+  },
+  "swagger": "2.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "description": "Get Health of Service",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Health",
+            "type": "object",
+            "schema": {
+              "$ref": null
+            }
+          }
+        }
+      }
+    },
+    "/tenants/{id}": {
+      "get": {
+        "description": "Get Tenant By Id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Id of Tenant",
+            "type": "string",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant",
+            "schema": {
+              "$ref": null
+            }
+          }
+        }
+      }
+    },
+    "/tenants": {
+      "get": {
+        "description": "Get Page of Tenant(s)",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "description": "Text Search String",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "page",
+            "description": "Page Number ( 0 index based )",
+            "type": "integer",
+            "format": "int64",
+            "required": false
+          },
+          {
+            "name": "size",
+            "description": "Page Size - default 10",
+            "type": "integer",
+            "format": "int64",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PageResponse",
+            "schema": {
+              "$ref": null
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Save Tenant",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "tenant",
+            "description": "Text Search String",
+            "type": "object",
+            "schema": {
+              "$ref": null
+            },
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant",
+            "schema": {
+              "$ref": null
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Error": {
+      "type": "object",
+      "required": [
+        "errorMessage"
+      ],
+      "properties": {
+        "errorMessage": {
+          "type": "string"
+        }
+      }
+    },
+    "Health": {
+      "type": "object",
+      "required": [
+        "cpuPercentUsage",
+        "totalMemPercentageUsage",
+        "loadAvg"
+      ]
+    },
+    "ServiceName": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "PageDescriptor": {
+      "type": "object",
+      "required": [
+        "page",
+        "size",
+        "total"
+      ],
+      "properties": {
+        "page": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "PageResponse": {
+      "type": "object",
+      "required": [
+        "page",
+        "elements"
+      ],
+      "properties": {
+        "page": {
+          "type": "object",
+          "schema": {
+            "$ref": "#/definitions/PageDescriptor"
+          }
+        },
+        "elements": {
+          "type": "array"
+        }
+      }
+    },
+    "Tenant": {
+      "type": "object",
+      "required": [
+        "name",
+        "timestamp",
+        "status",
+        "apiKey",
+        "apiSecret"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string"
+        },
+        "apiSecret": {
+          "type": "string"
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "schema": {
+              "$ref": null
+            }
+          }
+        },
+        "timestamp": {
+          "type": "number",
+          "format": "date"
+        }
+      }
+    }
+  },
+  "responses": {},
+  "parameters": {},
+  "securityDefinitions": {},
+  "tags": []
+}
