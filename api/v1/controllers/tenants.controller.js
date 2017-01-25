@@ -23,11 +23,22 @@ const getTenant = (app) => {
   return (req, res) => {
     let id = req.params.id;
     // validate id requirements.  If invalid return BAD_REQUEST
-    
+
     let tenantService = new TenantService();
     tenantService.findTenantById(id).then((result) => {
        console.log(result);
-       res.status(HttpStatus.OK).send(result);
+       if(result) {
+         res.status(HttpStatus.OK).send(result);
+       } else {
+         // Try to find by apiKey
+         tenantService.findTenantByApiKey(id).then((result) => {
+           if(result) {
+             res.status(HttpStatus.OK).send(result);
+           } else {
+             new Error(HttpStatus.NOT_FOUND, "Tenant not found").writeResponse(res);
+           }
+         });
+       }
      }).catch((err) => {
        new Error(HttpStatus.OK, err.message).writeResponse(res);
     });
@@ -67,3 +78,4 @@ const saveTenant = (app) => {
 /* Public */
 exports.getTenant = getTenant;
 exports.saveTenant = saveTenant;
+exports.findTenants = findTenants;

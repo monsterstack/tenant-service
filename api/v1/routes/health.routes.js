@@ -13,6 +13,9 @@ module.exports = (app) => {
    *    responses:
    *      200:
    *        description: Health
+   *        type: object
+   *        schema:
+   *          $ref: #/definitions/Health
    */
     app.get('/health', controller.getHealth(app));
 }
