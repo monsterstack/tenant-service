@@ -53,7 +53,6 @@ const findTenants = (app) => {
     let query = url_parts.query;
 
     let pageDescriptor = buildPageDescriptor(query);
-    let search = query.search;
     let tenantService = new TenantService();
 
     tenantService.findTenants(search, pageDescriptor).then((page) => {
@@ -63,7 +62,6 @@ const findTenants = (app) => {
     });
   }
 }
-
 const saveTenant = (app) => {
   return (req, res) => {
     let tenant = req.body;

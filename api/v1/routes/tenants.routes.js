@@ -24,7 +24,6 @@ module.exports = function(app) {
    *          $ref: #/definitions/Tenant
    */
   app.get('/api/v1/tenants/:id', controller.getTenant(app));
-
   /**
    * @swagger
    * /tenants
