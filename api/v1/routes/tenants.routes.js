@@ -6,7 +6,7 @@ const controller = require('../controllers/tenants.controller.js');
 module.exports = function(app) {
   /**
    * @swagger
-   * /tenants/:id
+   * /tenants/{id}:
    *  get:
    *    description: Get Tenant By Id
    *    produces:
@@ -20,14 +20,13 @@ module.exports = function(app) {
    *    responses:
    *      200:
    *        description: Tenant
-   *        type: object
    *        schema:
    *          $ref: #/definitions/Tenant
    */
   app.get('/api/v1/tenants/:id', controller.getTenant(app));
   /**
    * @swagger
-   * /tenants
+   * /tenants:
    *  get:
    *    description: Get Page of Tenant(s)
    *    produces:
@@ -51,7 +50,6 @@ module.exports = function(app) {
    *    responses:
    *      200:
    *        description: PageResponse
-   *        type: object
    *        schema:
    *          $ref: #/definitions/PageResponse
    */
@@ -59,7 +57,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /tenants
+   * /tenants:
    *  post:
    *    description: Save Tenant
    *    produces:
@@ -75,7 +73,6 @@ module.exports = function(app) {
    *    responses:
    *      200:
    *        description: Tenant
-   *        type: object
    *        schema:
    *          $ref: #/definitions/Tenant
    */
