@@ -20,7 +20,6 @@ module.exports = function(app) {
    *    responses:
    *      200:
    *        description: Tenant
-   *        type: object
    *        schema:
    *          $ref: #/definitions/Tenant
    */
@@ -52,7 +51,6 @@ module.exports = function(app) {
    *    responses:
    *      200:
    *        description: PageResponse
-   *        type: object
    *        schema:
    *          $ref: #/definitions/PageResponse
    */
@@ -76,7 +74,6 @@ module.exports = function(app) {
    *    responses:
    *      200:
    *        description: Tenant
-   *        type: object
    *        schema:
    *          $ref: #/definitions/Tenant
    */
