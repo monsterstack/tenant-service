@@ -8,14 +8,18 @@ module.exports = (app) => {
    * /health:
    *  get:
    *    description: Get Health of Service
+   *    tags:
+   *      - health
    *    produces:
+   *      - application/json
+   *    consumes:
    *      - application/json
    *    responses:
    *      200:
    *        description: Health
    *        type: object
    *        schema:
-   *          $ref: #/definitions/Health
+   *          $ref: '#/definitions/Health'
    */
     app.get('/health', controller.getHealth(app));
 }

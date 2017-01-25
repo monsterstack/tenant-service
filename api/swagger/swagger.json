@@ -9,7 +9,13 @@
     "/health": {
       "get": {
         "description": "Get Health of Service",
+        "tags": [
+          "health"
+        ],
         "produces": [
+          "application/json"
+        ],
+        "consumes": [
           "application/json"
         ],
         "responses": {
@@ -17,7 +23,7 @@
             "description": "Health",
             "type": "object",
             "schema": {
-              "$ref": null
+              "$ref": "#/definitions/Health"
             }
           }
         }
@@ -25,8 +31,16 @@
     },
     "/tenants/{id}": {
       "get": {
+        "summary": "Get Tenant By Id",
         "description": "Get Tenant By Id",
+        "operationId": "getTenant",
+        "tags": [
+          "tenants"
+        ],
         "produces": [
+          "application/json"
+        ],
+        "consumes": [
           "application/json"
         ],
         "parameters": [
@@ -41,8 +55,9 @@
         "responses": {
           "200": {
             "description": "Tenant",
+            "type": "object",
             "schema": {
-              "$ref": null
+              "$ref": "#/definitions/Tenant"
             }
           }
         }
@@ -50,8 +65,16 @@
     },
     "/tenants": {
       "get": {
+        "summary": "Get Tenants",
         "description": "Get Page of Tenant(s)",
+        "operationId": "getTenants",
+        "tags": [
+          "tenants"
+        ],
         "produces": [
+          "application/json"
+        ],
+        "consumes": [
           "application/json"
         ],
         "parameters": [
@@ -80,15 +103,24 @@
         "responses": {
           "200": {
             "description": "PageResponse",
+            "type": "object",
             "schema": {
-              "$ref": null
+              "$ref": "#/definitions/Tenant"
             }
           }
         }
       },
       "post": {
+        "summary": "Save Tenant",
         "description": "Save Tenant",
+        "operationId": "saveTenant",
+        "tags": [
+          "tenants"
+        ],
         "produces": [
+          "application/json"
+        ],
+        "consumes": [
           "application/json"
         ],
         "parameters": [
@@ -97,7 +129,7 @@
             "description": "Text Search String",
             "type": "object",
             "schema": {
-              "$ref": null
+              "$ref": "#/definitions/Tenant"
             },
             "in": "body",
             "required": true
@@ -106,8 +138,9 @@
         "responses": {
           "200": {
             "description": "Tenant",
+            "type": "object",
             "schema": {
-              "$ref": null
+              "$ref": "#/definitions/Tenant"
             }
           }
         }
@@ -176,12 +209,13 @@
       "properties": {
         "page": {
           "type": "object",
-          "schema": {
-            "$ref": "#/definitions/PageDescriptor"
-          }
+          "$ref": "#/definitions/PageDescriptor"
         },
         "elements": {
-          "type": "array"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tenant"
+          }
         }
       }
     },
@@ -213,9 +247,7 @@
         "services": {
           "type": "array",
           "items": {
-            "schema": {
-              "$ref": null
-            }
+            "$ref": "#/definitions/ServiceName"
           }
         },
         "timestamp": {
@@ -228,5 +260,30 @@
   "responses": {},
   "parameters": {},
   "securityDefinitions": {},
-  "tags": []
+  "tags": [
+    {
+      "name": "error",
+      "description": "Everything you need to know about Error"
+    },
+    {
+      "name": "health",
+      "description": "Everything you need to know about Health"
+    },
+    {
+      "name": "serviceNames",
+      "description": "Everything you need to know about ServiceNames"
+    },
+    {
+      "name": "pageDescriptors",
+      "description": "Everything you need to know about PageDescriptors"
+    },
+    {
+      "name": "pageResponses",
+      "description": "Everything you need to know about PageResponses"
+    },
+    {
+      "name": "tenants",
+      "description": "Everything you need to know about Tenants"
+    }
+  ]
 }

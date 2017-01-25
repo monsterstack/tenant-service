@@ -13,8 +13,8 @@ class TenantService {
     return model.findTenantByApiKey(apiKey);
   }
 
-  findTenants(search, page, size, sort) {
-    return model.findTenants(search, page, size, sort);
+  findTenants(search, pageDescriptor) {
+    return model.findTenants(search, pageDescriptor.page, pageDescriptor.size, 'asc');
   }
 
   saveTenant(tenant) {

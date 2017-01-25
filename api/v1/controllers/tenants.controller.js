@@ -55,6 +55,8 @@ const findTenants = (app) => {
     let pageDescriptor = buildPageDescriptor(query);
     let tenantService = new TenantService();
 
+    let search = query.search;
+
     tenantService.findTenants(search, pageDescriptor).then((page) => {
       res.status(HttpStatus.OK).send(page);
     }).catch((err) => {
