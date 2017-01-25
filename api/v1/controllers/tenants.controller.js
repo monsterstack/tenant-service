@@ -32,6 +32,7 @@ const getTenant = (app) => {
        } else {
          // Try to find by apiKey
          tenantService.findTenantByApiKey(id).then((result) => {
+           console.log(result);
            if(result) {
              res.status(HttpStatus.OK).send(result);
            } else {
@@ -51,7 +52,7 @@ const findTenants = (app) => {
     let url = require('url');
     let url_parts = url.parse(req.url, true);
     let query = url_parts.query;
-
+    let search = query.search;
     let pageDescriptor = buildPageDescriptor(query);
     let tenantService = new TenantService();
 
