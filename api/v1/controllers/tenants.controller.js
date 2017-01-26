@@ -4,7 +4,7 @@ const appRoot = require('app-root-path');
 
 const HttpStatus = require('http-status');
 const tenantModel = require('tenant-model').model;
-const HttpError = require('core-server').Error;
+const Error = require('core-server').Error;
 const Tenant = tenantModel.Tenant;
 
 const TenantService = require(appRoot + '/services/tenantService');
