@@ -31,6 +31,40 @@ module.exports = function(app) {
    *          $ref: '#/definitions/Tenant'
    */
   app.get('/api/v1/tenants/:id', controller.getTenant(app));
+
+  /**
+   * @swagger
+   * /tenants/_apiKey/{apiKey}:
+   *  get:
+   *    summary: Get Tenant By Api Key
+   *    description: Get Tenant By Api Key
+   *    operationId: getTenantByApiKey
+   *    tags:
+   *      - tenants
+   *    produces:
+   *      - application/json
+   *    consumes:
+   *      - application/json
+   *    parameters:
+   *      - name: apiKey
+   *        description: Api Key of Tenant
+   *        type: string
+   *        in: path
+   *        required: true
+   *    responses:
+   *      200:
+   *        description: Tenant
+   *        type: object
+   *        schema:
+   *          $ref: '#/definitions/Tenant'
+   *      404:
+   *        description: Error
+   *        type: object
+   *        schema:
+   *          $ref: '#/definitions/Error'
+   */
+  app.get('/api/v1/tenants/_apiKey/:apiKey', controller.getTenantByApiKey(app));
+
   /**
    * @swagger
    * /tenants:

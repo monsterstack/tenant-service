@@ -9,6 +9,7 @@ const main = () => {
   let announce = false;
   let useRandomWorkerPort = false;
   let announcement = require('./announcement.json');
+  let typeQuery = require('./typeQuery.json');
 
   // Handle Arguments
   if(optimist.argv.randomWorkerPort === 'true') {
@@ -28,7 +29,7 @@ const main = () => {
   }
 
   let Server = require('core-server').Server;
-  let server = new Server(announcement.name, announcement, {
+  let server = new Server(announcement.name, announcement, typeQuery, {
     discoveryHost: config.discovery.host,
     discoveryPort: config.discovery.port,
     useRandomWorkerPort: useRandomWorkerPort

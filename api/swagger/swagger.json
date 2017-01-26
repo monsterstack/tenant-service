@@ -63,6 +63,47 @@
         }
       }
     },
+    "/tenants/_apiKey/{apiKey}": {
+      "get": {
+        "summary": "Get Tenant By Api Key",
+        "description": "Get Tenant By Api Key",
+        "operationId": "getTenantByApiKey",
+        "tags": [
+          "tenants"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "description": "Api Key of Tenant",
+            "type": "string",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Tenant"
+            }
+          },
+          "404": {
+            "description": "Error",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/tenants": {
       "get": {
         "summary": "Get Tenants",
@@ -165,7 +206,18 @@
         "cpuPercentUsage",
         "totalMemPercentageUsage",
         "loadAvg"
-      ]
+      ],
+      "properties": {
+        "cpuPercentUsage": {
+          "type": "number"
+        },
+        "totalMemPercentageUsage": {
+          "type": "number"
+        },
+        "loadAvg": {
+          "type": "number"
+        }
+      }
     },
     "ServiceName": {
       "type": "object",

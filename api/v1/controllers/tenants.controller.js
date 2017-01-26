@@ -19,6 +19,34 @@ const buildPageDescriptor = (query) => {
   }
 }
 
+/**
+ * Get Tenant By Api Key
+ * @Todo: Response always contains {} when 404
+ */
+const getTenantByApiKey = (app) => {
+  return (req, res) => {
+    let apiKey = req.params.apiKey;
+    let tenantService = new TenantService();
+    // Try to find by apiKey
+    tenantService.findTenantByApiKey(apiKey).then((result) => {
+      console.log(result);
+      if(result) {
+        res.status(HttpStatus.OK).send(result);
+      } else {
+        let errorResponse = new Error(HttpStatus.NOT_FOUND, "Tenant not found");
+        console.log(errorResponse.toJSON());
+        errorResponse.writeResponse(res);
+      }
+    }).catch((err) => {
+      if(err instanceof Error) {
+        err.writeResponse(res);
+      } else {
+        new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+      }
+    });
+  }
+}
+
 const getTenant = (app) => {
   return (req, res) => {
     let id = req.params.id;
@@ -26,22 +54,15 @@ const getTenant = (app) => {
 
     let tenantService = new TenantService();
     tenantService.findTenantById(id).then((result) => {
-       console.log(result);
        if(result) {
          res.status(HttpStatus.OK).send(result);
        } else {
-         // Try to find by apiKey
-         tenantService.findTenantByApiKey(id).then((result) => {
-           console.log(result);
-           if(result) {
-             res.status(HttpStatus.OK).send(result);
-           } else {
-             new Error(HttpStatus.NOT_FOUND, "Tenant not found").writeResponse(res);
-           }
-         });
+         new Error(HttpStatus.NOT_FOUND, "Not found").writeResponse(res);
        }
      }).catch((err) => {
-       new Error(HttpStatus.OK, err.message).writeResponse(res);
+       let errResponse = new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message);
+       console.log(errResponse.toJSON());
+       errResponse.writeResponse(res);
     });
   }
 }
@@ -55,8 +76,6 @@ const findTenants = (app) => {
     let search = query.search;
     let pageDescriptor = buildPageDescriptor(query);
     let tenantService = new TenantService();
-
-    let search = query.search;
 
     tenantService.findTenants(search, pageDescriptor).then((page) => {
       res.status(HttpStatus.OK).send(page);
@@ -80,5 +99,6 @@ const saveTenant = (app) => {
 
 /* Public */
 exports.getTenant = getTenant;
+exports.getTenantByApiKey = getTenantByApiKey;
 exports.saveTenant = saveTenant;
 exports.findTenants = findTenants;
