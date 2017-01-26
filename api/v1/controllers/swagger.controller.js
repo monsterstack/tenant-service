@@ -1,7 +1,7 @@
 'use strict';
 const appRoot = require('app-root-path');
 const HttpStatus = require('http-status');
-const Error = require('core-server').Error;
+const ServiceError = require('core-server').ServiceError;
 const SwaggerService = require('core-server').SwaggerService;
 const ip = require('ip');
 const swagger = require(appRoot + '/api/swagger/swagger.json');
@@ -12,7 +12,7 @@ const getSwagger = (app) => {
     swaggerService.getSwagger().then((swagger) => {
       res.status(HttpStatus.OK).send(swagger);
     }).catch((err) => {
-      new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+      new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
     });
   }
 }

@@ -1,7 +1,7 @@
 'use strict';
 const appRoot = require('app-root-path');
 const HttpStatus = require('http-status');
-const Error = require('core-server').Error;
+const ServiceError = require('core-server').ServiceError;
 const ProxyCacheService = require('core-server').ProxyCacheService;
 
 const cache = (app) => {
@@ -10,7 +10,7 @@ const cache = (app) => {
     proxyCacheService.cache().then((cache) => {
       res.status(HttpStatus.OK).send(cache);
     }).catch((error) => {
-      new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+      new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
     });
   }
 }

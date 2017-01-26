@@ -2,7 +2,7 @@
 
 const appRoot = require('app-root-path');
 const HttpStatus = require('http-status');
-const Error = require('core-server').Error;
+const ServiceError = require('core-server').ServiceError;
 const HealthService = require('core-server').HealthService;
 
 
@@ -12,7 +12,7 @@ const getHealth = (app) => {
     healthService.getHealth().then((health) => {
       res.status(HttpStatus.OK).send(health);
     }).catch((err) => {
-      new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+      new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
     });
   }
 }
