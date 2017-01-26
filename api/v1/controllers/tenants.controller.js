@@ -23,7 +23,6 @@ const getTenant = (app) => {
   return (req, res) => {
     let id = req.params.id;
     // validate id requirements.  If invalid return BAD_REQUEST
-
     let tenantService = new TenantService();
     tenantService.findTenantById(id).then((result) => {
        console.log(result);
@@ -41,11 +40,10 @@ const getTenant = (app) => {
          });
        }
      }).catch((err) => {
-       new Error(HttpStatus.OK, err.message).writeResponse(res);
+       new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
     });
   }
 }
-
 
 const findTenants = (app) => {
   return (req, res) => {
@@ -63,17 +61,30 @@ const findTenants = (app) => {
     });
   }
 }
+
 const saveTenant = (app) => {
   return (req, res) => {
     let tenant = req.body;
+    console.log(tenant);
+    console.log(tenant.name);
     let tenantService = new TenantService();
-    tenantService.saveTenant(tenant).then((result) => {
-       console.log(result);
-       res.status(HttpStatus.OK).send(result);
-     }).catch((err) => {
-       new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
-    });
+    let tenantName = tenant.name;
+
+    tenantService.findTenantByName((tenantName).then(result) => {
+        if (result ){
+          res.status(HttpStatus.BAD_REQUEST, "A tenant with that name already exists");
+        } else{
+          tenantService.saveTenant(tenant).then((result) => {
+             console.log(result);
+             res.status(HttpStatus.OK).send(result);
+           }).catch((err) => {
+              new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+          });
+        }
+    }).catch((err) => {
+      new Error(HttpStatus.OK, err.message).writeResponse(res);
   }
+ }
 }
 
 /* Public */
