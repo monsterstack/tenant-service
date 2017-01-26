@@ -2,6 +2,19 @@
 
 /**
  * @swagger
+ * tags:
+ *  - name: error
+ *    description: 'Everything you need to know about Error'
+ *  - name: health
+ *    description: 'Everything you need to know about Health'
+ *  - name: serviceNames
+ *    description: 'Everything you need to know about ServiceNames'
+ *  - name: pageDescriptors
+ *    description: 'Everything you need to know about PageDescriptors'
+ *  - name: pageResponses
+ *    description: 'Everything you need to know about PageResponses'
+ *  - name: tenants
+ *    description: 'Everything you need to know about Tenants'
  * definitions:
  *   Error:
  *     type: object
@@ -16,6 +29,13 @@
  *        - cpuPercentUsage
  *        - totalMemPercentageUsage
  *        - loadAvg
+ *     properties:
+ *        cpuPercentUsage:
+ *          type: number
+ *        totalMemPercentageUsage:
+ *          type: number
+ *        loadAvg:
+ *          type: number
  *   ServiceName:
  *     type: object
  *     required:
@@ -47,10 +67,11 @@
  *     properties:
  *       page:
  *          type: object
- *          schema:
- *            $ref: '#/definitions/PageDescriptor'
+ *          $ref: '#/definitions/PageDescriptor'
  *       elements:
  *          type: array
+ *          items:
+ *            $ref: '#/definitions/Tenant'
  *   Tenant:
  *     type: object
  *     required:
@@ -73,8 +94,7 @@
  *        services:
  *          type: array
  *          items:
- *            schema:
- *              $ref: #/definitions/ServiceName
+ *            $ref: '#/definitions/ServiceName'
  *        timestamp:
  *          type: number
  *          format: date
