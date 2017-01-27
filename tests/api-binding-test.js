@@ -35,11 +35,9 @@ describe('tenant-api-binding', () => {
 
     apiBinding.bind().then((service) => {
       console.log(`Checking Api...`);
-      // assert(service.api !== null, "Binding didn't fail");
-      // assert(service.api.health !== null, "Health Endpoints Exist");
-      //
-      // assert(service.api.oauth !== null, "Oauth Endpoints Exist");
-      // assert(service.api.token !== null, "Token Endpoints Exist");
+      assert(service.api !== null, "Binding didn't fail");
+      assert(service.api.health !== null, "Health Endpoints Exist");
+      assert(service.api.tenants !== null, "Token Endpoints Exist");
       done();
     }).catch((err) => {
       assert(err === undefined, "Error didn't occur");
