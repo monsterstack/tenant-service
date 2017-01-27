@@ -4,7 +4,7 @@ const appRoot = require('app-root-path');
 
 const HttpStatus = require('http-status');
 const tenantModel = require('tenant-model').model;
-const Error = require('core-server').Error;
+const ServiceError = require('core-server').ServiceError;
 const Tenant = tenantModel.Tenant;
 
 const TenantService = require(appRoot + '/services/tenantService');
@@ -33,7 +33,7 @@ const getTenantByApiKey = (app) => {
       if(result) {
         res.status(HttpStatus.OK).send(result);
       } else {
-        let errorResponse = new Error(HttpStatus.NOT_FOUND, "Tenant not found");
+        let errorResponse = new ServiceError(HttpStatus.NOT_FOUND, "Tenant not found");
         console.log(errorResponse.toJSON());
         errorResponse.writeResponse(res);
       }
@@ -41,7 +41,7 @@ const getTenantByApiKey = (app) => {
       if(err instanceof Error) {
         err.writeResponse(res);
       } else {
-        new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+        new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
       }
     });
   }
@@ -56,10 +56,10 @@ const getTenant = (app) => {
        if(result) {
          res.status(HttpStatus.OK).send(result);
        } else {
-         new Error(HttpStatus.NOT_FOUND, "Not found").writeResponse(res);
+         new ServiceError(HttpStatus.NOT_FOUND, "Not found").writeResponse(res);
        }
      }).catch((err) => {
-       let errResponse = new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message);
+       let errResponse = new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message);
        console.log(errResponse.toJSON());
        errResponse.writeResponse(res);
     });
@@ -78,7 +78,7 @@ const findTenants = (app) => {
     tenantService.findTenants(search, pageDescriptor).then((page) => {
       res.status(HttpStatus.OK).send(page);
     }).catch((err) => {
-      new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+      new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
     });
   }
 }
@@ -90,11 +90,11 @@ const saveTenant = (app) => {
     console.log(tenant.name);
     let tenantService = new TenantService();
     let tenantName = tenant.name;
-    
+
     tenantService.findTenantByName(tenantName).then((result) => {
         if (result ){
           res.status(HttpStatus.BAD_REQUEST, "A tenant with that name already exists");
-        } else{
+        } else {
           tenantService.saveTenant(tenant).then((result) => {
              console.log(result);
              res.status(HttpStatus.OK).send(result);
@@ -104,7 +104,7 @@ const saveTenant = (app) => {
         }
     }).catch((err) => {
       new Error(HttpStatus.OK, err.message).writeResponse(res);
-  }
+   });
  }
 }
 
