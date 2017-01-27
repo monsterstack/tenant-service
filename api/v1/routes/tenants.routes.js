@@ -63,7 +63,7 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Error'
    */
-  app.get('/api/v1/tenants/_apiKey/:apiKey', controller.getTenantByApiKey(app));
+  app.get('/api/v1/tenants/_apiKey/:apiKey', app.authCheck.authCheck(app), controller.getTenantByApiKey(app));
 
   /**
    * @swagger
@@ -101,7 +101,7 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Tenant'
    */
-  app.get('/api/v1/tenants', controller.findTenants(app));
+  app.get('/api/v1/tenants', app.authCheck.authCheck(app), controller.findTenants(app));
 
   /**
    * @swagger
@@ -131,5 +131,5 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Tenant'
    */
-  app.post('/api/v1/tenants', controller.saveTenant(app));
+  app.post('/api/v1/tenants', app.authCheck.authCheck(app), controller.saveTenant(app));
 }
