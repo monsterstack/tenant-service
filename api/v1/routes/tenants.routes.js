@@ -30,7 +30,7 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Tenant'
    */
-  app.get('/api/v1/tenants/:id', controller.getTenant(app));
+  app.get('/api/v1/tenants/:id', app.authCheck.authCheck(app), controller.getTenant(app));
 
   /**
    * @swagger

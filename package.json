@@ -10,12 +10,12 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zacharyrote/tenant-service.git"
+    "url": "git+https://github.com/monsterstack/tenant-service.git"
   },
   "bugs": {
-    "url": "https://github.com/zacharyrote/tenant-service/issues"
+    "url": "https://github.com/monsterstack/tenant-service/issues"
   },
-  "homepage": "https://github.com/zacharyrote/tenant-service#readme",
+  "homepage": "https://github.com/monsterstack/tenant-service#readme",
   "dependencies": {
     "app-root-path": "^2.0.1",
     "async": "^2.1.4",
@@ -24,10 +24,10 @@
     "coffee-script": "^1.12.2",
     "config": "^1.24.0",
     "connect": "2.x",
-    "core-server": "https://github.com/zacharyrote/core-server#development",
+    "core-server": "https://github.com/monsterstack/core-server#development",
     "cors": "^2.8.1",
     "debug": "^2.6.0",
-    "discovery-proxy": "https://github.com/zacharyrote/discovery-proxy#development",
+    "discovery-proxy": "https://github.com/monsterstack/discovery-proxy#development",
     "ejs": "^2.5.5",
     "express": "^4.14.0",
     "external-ip": "^0.2.4",
@@ -45,7 +45,7 @@
     "socket.io-client": "^1.7.2",
     "socket.io-redis": "^2.0.1",
     "socketio-auth": "^0.1.0",
-    "tenant-model": "https://github.com/zacharyrote/tenant-model#development",
+    "tenant-model": "https://github.com/monsterstack/tenant-model#development",
     "winston": "^2.3.0"
   }
 }
