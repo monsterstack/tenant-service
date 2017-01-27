@@ -13,6 +13,10 @@ class TenantService {
     return model.findTenantByApiKey(apiKey);
   }
 
+  findTenantByName(name) {
+    return model.findTenantByName(name);
+  }
+
   findTenants(search, pageDescriptor) {
     return model.findTenants(search, pageDescriptor.page, pageDescriptor.size, 'asc');
   }
