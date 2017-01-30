@@ -8,6 +8,7 @@ module.exports = (app) => {
    * /health:
    *  get:
    *    description: Get Health of Service
+   *    operationId: getHealth
    *    tags:
    *      - health
    *    produces:
