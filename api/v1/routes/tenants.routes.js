@@ -23,6 +23,11 @@ module.exports = function(app) {
    *        type: string
    *        in: path
    *        required: true
+   *      - name: x-fast-pass
+   *        description: Bypass Auth
+   *        type: boolean
+   *        in: header
+   *        require: false
    *    responses:
    *      200:
    *        description: Tenant
@@ -35,7 +40,7 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Error'
    */
-  app.get('/api/v1/tenants/:id', app.authCheck.authCheck(), controller.getTenant(app));
+  app.get('/api/v1/tenants/:id', app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getTenant(app));
 
   /**
    * @swagger
@@ -56,6 +61,11 @@ module.exports = function(app) {
    *        type: string
    *        in: path
    *        required: true
+   *      - name: x-fast-pass
+   *        description: Bypass Auth
+   *        type: boolean
+   *        in: header
+   *        require: false
    *    responses:
    *      200:
    *        description: Tenant
@@ -68,7 +78,7 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Error'
    */
-  app.get('/api/v1/tenants/_apiKey/:apiKey', app.authCheck.authCheck(), controller.getTenantByApiKey(app));
+  app.get('/api/v1/tenants/_apiKey/:apiKey', app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getTenantByApiKey(app));
 
   /**
    * @swagger
@@ -99,6 +109,11 @@ module.exports = function(app) {
    *        type: integer
    *        format: int64
    *        required: false
+   *      - name: x-fast-pass
+   *        description: Bypass Auth
+   *        type: boolean
+   *        in: header
+   *        require: false
    *    responses:
    *      200:
    *        description: PageResponse
@@ -106,7 +121,7 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Tenant'
    */
-  app.get('/api/v1/tenants', app.authCheck.authCheck(), controller.findTenants(app));
+  app.get('/api/v1/tenants', app.authCheck.fastPass(), app.authCheck.authCheck(), controller.findTenants(app));
 
   /**
    * @swagger
@@ -122,13 +137,18 @@ module.exports = function(app) {
    *    consumes:
    *      - application/json
    *    parameters:
-   *      - name: tenant
+   *      - name: search
    *        description: Text Search String
    *        type: object
    *        schema:
    *          $ref: '#/definitions/Tenant'
    *        in: body
    *        required: true
+   *      - name: x-fast-pass
+   *        description: Bypass Auth
+   *        type: boolean
+   *        in: header
+   *        require: false
    *    responses:
    *      200:
    *        description: Tenant
@@ -141,5 +161,5 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Error'
    */
-  app.post('/api/v1/tenants', app.authCheck.authCheck(), controller.saveTenant(app));
+  app.post('/api/v1/tenants', app.authCheck.fastPass(), app.authCheck.authCheck(), controller.saveTenant(app));
 }

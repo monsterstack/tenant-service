@@ -9,6 +9,7 @@
     "/health": {
       "get": {
         "description": "Get Health of Service",
+        "operationId": "getHealth",
         "tags": [
           "health"
         ],
@@ -50,6 +51,13 @@
             "type": "string",
             "in": "path",
             "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
           }
         ],
         "responses": {
@@ -58,6 +66,13 @@
             "type": "object",
             "schema": {
               "$ref": "#/definitions/Tenant"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         }
@@ -84,6 +99,13 @@
             "type": "string",
             "in": "path",
             "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
           }
         ],
         "responses": {
@@ -139,6 +161,13 @@
             "type": "integer",
             "format": "int64",
             "required": false
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
           }
         ],
         "responses": {
@@ -166,7 +195,7 @@
         ],
         "parameters": [
           {
-            "name": "tenant",
+            "name": "search",
             "description": "Text Search String",
             "type": "object",
             "schema": {
@@ -174,6 +203,13 @@
             },
             "in": "body",
             "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
           }
         ],
         "responses": {
@@ -182,6 +218,13 @@
             "type": "object",
             "schema": {
               "$ref": "#/definitions/Tenant"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         }

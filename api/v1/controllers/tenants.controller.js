@@ -28,9 +28,10 @@ const getTenantByApiKey = (app) => {
     let apiKey = req.params.apiKey;
     let tenantService = new TenantService();
     // Try to find by apiKey
+    console.log(apiKey);
     tenantService.findTenantByApiKey(apiKey).then((result) => {
-      console.log(result);
       if(result) {
+        console.log(result);
         res.status(HttpStatus.OK).send(result);
       } else {
         let errorResponse = new ServiceError(HttpStatus.NOT_FOUND, "Tenant not found");
