@@ -24,6 +24,12 @@ describe('tenant-api-binding', () => {
 
   });
 
+  /**
+   * This test makes sure all the api(s) for TenantService are available via
+   * ApiBinding.  Note the stubbed minimal ServiceDescriptor for ApiBinding.
+   * It is assumed the TenantService is serving up a valid swagger.json that
+   * accurately described the operations / tags supported by the TenantService.
+   */
   it('api created when binding occurs', (done) => {
 
     let service = {

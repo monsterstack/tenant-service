@@ -29,8 +29,13 @@ module.exports = function(app) {
    *        type: object
    *        schema:
    *          $ref: '#/definitions/Tenant'
+   *      404:
+   *        description: Not found
+   *        type: object
+   *        schema:
+   *          $ref: '#/definitions/Error'
    */
-  app.get('/api/v1/tenants/:id', controller.getTenant(app));
+  app.get('/api/v1/tenants/:id', app.authCheck.authCheck(), controller.getTenant(app));
 
   /**
    * @swagger
@@ -63,7 +68,7 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Error'
    */
-  app.get('/api/v1/tenants/_apiKey/:apiKey', controller.getTenantByApiKey(app));
+  app.get('/api/v1/tenants/_apiKey/:apiKey', app.authCheck.authCheck(), controller.getTenantByApiKey(app));
 
   /**
    * @swagger
@@ -101,7 +106,7 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Tenant'
    */
-  app.get('/api/v1/tenants', controller.findTenants(app));
+  app.get('/api/v1/tenants', app.authCheck.authCheck(), controller.findTenants(app));
 
   /**
    * @swagger
@@ -130,6 +135,11 @@ module.exports = function(app) {
    *        type: object
    *        schema:
    *          $ref: '#/definitions/Tenant'
+   *      400:
+   *        description: Bad request
+   *        type: object
+   *        schema:
+   *          $ref: '#/definitions/Error'
    */
-  app.post('/api/v1/tenants', controller.saveTenant(app));
+  app.post('/api/v1/tenants', app.authCheck.authCheck(), controller.saveTenant(app));
 }

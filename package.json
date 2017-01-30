@@ -4,7 +4,7 @@
   "description": "Tenant Service",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha ./tests/*-test.js --reporter mocha-better-spec-reporter"
   },
   "author": "",
   "license": "ISC",
@@ -47,5 +47,8 @@
     "socketio-auth": "^0.1.0",
     "tenant-model": "https://github.com/monsterstack/tenant-model#development",
     "winston": "^2.3.0"
+  },
+  "devDependencies": {
+    "mocha-better-spec-reporter": "^3.1.0"
   }
 }
