@@ -31,12 +31,9 @@ const getTenantByApiKey = (app) => {
     console.log(apiKey);
     tenantService.findTenantByApiKey(apiKey).then((result) => {
       if(result) {
-        console.log(result);
         res.status(HttpStatus.OK).send(result);
       } else {
         let errorResponse = new ServiceError(HttpStatus.NOT_FOUND, "Tenant not found");
-        console.log(">>>>");
-        console.log(errorResponse.toJSON());
         errorResponse.writeResponse(res);
       }
     }).catch((err) => {
