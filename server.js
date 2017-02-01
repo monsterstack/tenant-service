@@ -10,6 +10,7 @@ const main = () => {
   let useRandomWorkerPort = false;
   let announcement = require('./announcement.json');
   let typeQuery = require('./typeQuery.json');
+  let discoveryHost = config.discovery.host;
 
   // Handle Arguments
   if(optimist.argv.randomWorkerPort === 'true') {
@@ -28,10 +29,13 @@ const main = () => {
     announcement.stage = optimist.argv.stage;
   }
 
+  if(optimist.argv.discoveryHost)
+    discoveryHost = optimist.argv.discoveryHost;
+
   let Server = require('core-server').Server;
   let server = new Server(announcement.name, announcement, typeQuery, {
-    discoveryHost: config.discovery.host,
-    discoveryPort: config.discovery.port,
+    discoveryHost: discoveryHost,
+    discoveryPort: config.discovery.port || 7616,
     useRandomWorkerPort: useRandomWorkerPort
   });
 
