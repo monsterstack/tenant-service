@@ -40,7 +40,8 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Error'
    */
-  app.get('/api/v1/tenants/:id', app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getTenant(app));
+  app.get('/api/v1/tenants/:id', app.realizationCheck.dependenciesAreRealized(),
+            app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getTenant(app));
 
   /**
    * @swagger
@@ -78,7 +79,8 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Error'
    */
-  app.get('/api/v1/tenants/_apiKey/:apiKey', app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getTenantByApiKey(app));
+  app.get('/api/v1/tenants/_apiKey/:apiKey', app.realizationCheck.dependenciesAreRealized(),
+        app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getTenantByApiKey(app));
 
   /**
    * @swagger
@@ -121,7 +123,8 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Tenant'
    */
-  app.get('/api/v1/tenants', app.authCheck.fastPass(), app.authCheck.authCheck(), controller.findTenants(app));
+  app.get('/api/v1/tenants', app.realizationCheck.dependenciesAreRealized(),
+      app.authCheck.fastPass(), app.authCheck.authCheck(), controller.findTenants(app));
 
   /**
    * @swagger
@@ -161,5 +164,6 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/Error'
    */
-  app.post('/api/v1/tenants', app.authCheck.fastPass(), app.authCheck.authCheck(), controller.saveTenant(app));
+  app.post('/api/v1/tenants', app.realizationCheck.dependenciesAreRealized(),
+        app.authCheck.fastPass(), app.authCheck.authCheck(), controller.saveTenant(app));
 }
