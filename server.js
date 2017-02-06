@@ -59,13 +59,6 @@ const main = () => {
   }).catch((err) => {
     console.log(err);
   });
-
-  process.on('message', function(msg, socket) {
-      if (msg !== 'sticky-session:connection') return;
-      // Emulate a connection event on the server by emitting the
-      // event with the connection the master sent us.
-      server.getHttp().emit('connection', socket);
-  });
 }
 
 

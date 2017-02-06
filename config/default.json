@@ -1,8 +1,16 @@
 {
   "port": 8616,
+  "db": {
+    "host": "192.168.99.100",
+    "port": 32772
+  },
   "discovery": {
-    "host": "localhost",
+    "host": "192.168.99.100",
     "port": 7616
+  },
+  "redis": {
+    "host": "192.168.99.100",
+    "port": 32775
   },
   "websockets": {
     "enabled": true
