@@ -7,4 +7,4 @@ services:
     volumes:
       - .:/code
     environment:
-      - HOST_IP=192.168.99.100
+      - HOST_IP=192.168.99.101
