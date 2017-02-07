@@ -10,7 +10,7 @@
   },
   "redis": {
     "host": "192.168.99.100",
-    "port": 32775
+    "port": 32773
   },
   "websockets": {
     "enabled": true
