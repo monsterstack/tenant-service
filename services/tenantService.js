@@ -21,6 +21,10 @@ class TenantService {
     return model.findTenants(search, pageDescriptor.page, pageDescriptor.size, 'asc');
   }
 
+  allTenants(pageDescriptor) {
+    return model.allTenants(pageDescriptor.page, pageDescriptor.size, 'asc');
+  }
+
   saveTenant(tenant) {
     return model.saveTenant(tenant);
   }

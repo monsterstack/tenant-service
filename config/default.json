@@ -1,20 +1,20 @@
 {
   "port": 8616,
   "db": {
-    "host": "192.168.99.101",
+    "host": "cdsp.digitalfunk.io",
     "port": 27017
   },
   "discovery": {
-    "host": "192.168.99.101",
+    "host": "cdsp.digitalfunk.io",
     "port": 7616
   },
   "stash": {
     "type": "tcp",
-    "host": "192.168.99.101",
+    "host": "cdsp.digitalfunk.io",
     "port": 9600
   },
   "redis": {
-    "host": "192.168.99.101",
+    "host": "cdsp.digitalfunk.io",
     "port": 6379
   },
   "websockets": {

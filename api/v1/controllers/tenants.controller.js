@@ -74,11 +74,19 @@ const findTenants = (app) => {
     let pageDescriptor = buildPageDescriptor(query);
     let tenantService = new TenantService();
 
-    tenantService.findTenants(search, pageDescriptor).then((page) => {
-      res.status(HttpStatus.OK).send(page);
-    }).catch((err) => {
-      new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
-    });
+    if(search) {
+      tenantService.findTenants(search, pageDescriptor).then((page) => {
+        res.status(HttpStatus.OK).send(page);
+      }).catch((err) => {
+        new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+      });
+    } else {
+      tenantService.allTenants(pageDescriptor).then((page) => {
+        res.status(HttpStatus.OK).send(page);
+      }).catch((err) => {
+        new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+      });
+    }
   }
 }
 
