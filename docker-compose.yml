@@ -8,3 +8,5 @@ services:
       - .:/code
     environment:
       - HOST_IP=${HOST_IP}
+    extra_hosts:
+      - "cdsp.digitalfunk.io:${HOST_IP}"
