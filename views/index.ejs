@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+    <title>Tenant Service</title>
+    <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-blue.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.20.0/select.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<body ng-app="TenantServicePortal" layout layout-align="start stretch">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.6.1/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-aria.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.js"></script>
+
+    <script defer type="text/javascript" src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script type="text/javascript" src="http://angular-data-grid.github.io/dist/dataGrid.min.js"></script>
+    <script type="text/javascript" src="http://angular-data-grid.github.io/dist/pagination.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.20.0/select.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.js"></script>
+
+    <script type="text/javascript" src="./portal/index.js"></script>
+    <script type="text/javascript" src="./portal/components/tenant.search/tenant.search.js"></script>
+
+    <md-toolbar layout layout-align="start center" class="md-whiteframe-2dp  md-primary md-hue-2">
+        <h3 flex>
+<!--             <i class="material-icons md-light" style="font-size:32px; vertical-align:middle">explore</i> -->
+            Tenant Searching Portal
+        </h3>
+    </md-toolbar>
+
+    <dsp-services-search>
+    </dsp-services-search>
+
+</body>
+</html>

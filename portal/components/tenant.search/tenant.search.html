@@ -1,0 +1,153 @@
+<md-card flex>
+    <form novalidate style="width: 90%; margin: auto;">
+        <md-card-header style="display:flex;">
+            <md-input-container class="md-block" flex>
+                <input type="text" ng-model="vm.display.searchCriteria" ng-change="vm.events.onSearchCriteriaChange()" placeholder="Select Service Types..." required>
+            </md-input-container>
+            <md-button type="submit" ng-click="vm.events.onSearch()" class="md-fab md-primary" ng-disabled="vm.display.searchSubmitted">
+                <i class="material-icons md-light" style="font-size:32px; vertical-align:middle">search</i>
+            </md-button>
+        </md-card-header>
+<!--         <hr>
+        <md-card-header style="display:flex;">
+            <md-input-container class="md-block" flex>
+                <label>Stage</label>
+                <md-select ng-model="vm.display.selectedStage" ng-change="vm.events.onFilterChange()" placeholder="All Stages">
+                    <md-option value="">All Stages</md-option>
+                    <md-option ng-repeat="stage in vm.display.stages" value="{{stage}}">{{stage}}</md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container class="md-block" flex>
+                <label>Region</label>
+                <md-select ng-model="vm.display.selectedRegion" ng-change="vm.events.onFilterChange()" placeholder="All Regions">
+                    <md-option value="">All Regions</md-option>
+                    <md-option ng-repeat="region in vm.display.regions" value="{{region}}">{{region}}</md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container class="md-block" flex>
+                <label>Status</label>
+                <md-select ng-model="vm.display.selectedStatus" ng-change="vm.events.onFilterChange()" placeholder="All Statuses">
+                    <md-option value="">All Statuses</md-option>
+                    <md-option ng-repeat="status in vm.display.statuses" value="{{status}}">{{status}}</md-option>
+                </md-select>
+            </md-input-container>
+        </md-card-header> -->
+    </form>
+    <md-content>
+            <md-subheader class="md-primary" ng-if="vm.display.searchSubmitted && vm.display.pagination.total > 0" style="display: flex; width: 90%; margin: auto;">
+                <span ng-bind="vm.display.pagination.total"></span> results
+            </md-subheader>
+            <md-subheader class="md-primary" ng-if="vm.display.searchSubmitted && vm.display.pagination.total == 0"
+            style="display: flex; width: 90%; margin: auto;">
+                No tenant was found.
+            </md-subheader>
+            <md-subheader class="md-primary" ng-if="!vm.display.searchSubmitted" style="display: flex; width: 90%; margin: auto;">
+                Search criteria changed, please click search button.
+            </md-subheader>
+            <div style="display: flex; width: 90%; margin: auto; justify-content: space-between;">
+                <grid-pagination max-size="5"
+                                 boundary-links="true"
+                                 class="pagination"
+                                 ng-if="vm.display.pagination.total  > vm.display.pagination.size"
+                                 total-items="vm.display.pagination.total"
+                                 ng-model="vm.display.pagination.oneIndexedPage"
+                                 ng-change="vm.events.onPageChange()"
+                                 items-per-page="vm.display.pagination.size"
+                                 next-text=">>"
+                                 previous-text="<<">
+                </grid-pagination>
+                <md-input-container class="md-block" style="margin-left:auto;">
+                    <md-select ng-init="vm.display.pagination.size = '10'" placeholder="10" ng-model="vm.display.pagination.size" ng-change="vm.events.onItemPerPageChange()">
+                        <md-option value="10">10</md-option>
+                        <md-option value="25">25</md-option>
+                        <md-option value="50">50</md-option>
+                        <md-option value="75">75</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div>
+                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 90%; margin: auto;">
+                    <thead>
+                        <tr>
+                            <th sortable="_id" class="sortable">
+                                <span>Tenant ID</span>
+                            </th>
+                            <th sortable="name" class="sortable">
+                                <span>Name</span>
+                            </th>
+                            <th sortable="uptime" class="sortable">
+                                <span>Last Modified Timestamp</span>
+                            </th>
+                            <th sortable="status" class="sortable">
+                                <span>Stage</span>
+                            </th>
+                            <th sortable="apiKey" class="sortable">
+                                <span>apiKey</span>
+                            </th>
+                            <th sortable="apiSecret" class="sortable">
+                                <span>apiSecret</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="result in vm.display.searchResults">
+                        <tr grid-item>
+                            <td ng-bind="result._id"></td>
+                            <td ng-bind="result.name"></td>
+                            <td ng-bind="result.timestamp"></td>
+                            <td ng-bind="result.status"></td>
+                            <td ng-bind="result.apiKey"></td>
+                            <td ng-click="vm.events.showApiSecret(result.apiKey, result.apiSecret)">Click to Show</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+    </md-content>
+</md-card>
+
+<style>
+    ul.pagination {
+        padding: 0;
+        font-size: 0;
+        display: inline-block;
+    }
+    .pagination > li {
+        display: inline-block;
+        vertical-align: middle;
+        height: 30px;
+        border: 1px solid #ddd;
+        border-left: 0;
+    }
+    .pagination > li:first-child {
+        border-left: 1px solid #ddd;
+        border-radius: 2px 0 0 2px;
+    }
+    .pagination > li:last-child {
+        border-radius: 0 2px 2px 0;
+    }
+    .pagination a {
+        color: #444;
+        font-size: 13px;
+        padding: 0 10px;
+        line-height: 30px;
+        display: inline-block;
+        text-decoration: none;
+    }
+    .pagination .active {
+        background: #3f51b5;
+        border-color: #3f51b5;
+    }
+    .pagination .active a {
+        color: #fff;
+    }
+    .pagination-page.active {
+        background: #3f51b5;
+    }
+    .pagination-page.active a {
+      color: #fff;
+    }
+
+    .apiSecretText{
+        word-wrap: break-word;
+    }
+</style>
