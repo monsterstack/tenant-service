@@ -5,6 +5,14 @@ const optimist = require('optimist');
 const express = require('express');
 const path = require('path');
 
+/**
+ * Start Server
+ * Options:
+ * --randomWorkerPort ( true or false ) Do we bind to a random port ( used for child process being managed by cluster )
+ *                    or do we use the standard config.port.
+ * --announce         ( true or false ) Do we announce ourselves to the Discovery Service
+ * --discoveryHost ( Where do I Announce myself?  Where is my Discovery Service)
+ */
 const main = () => {
   let announce = false;
   let useRandomWorkerPort = false;

@@ -4,6 +4,11 @@ const Cluster = require('core-server').Cluster;
 
 const optimist = require('optimist');
 
+/**
+ * Start Cluster
+ * --numWorkers       How many child processes do we manager?  Default matches the number of cpu cores available.
+ * --discoveryHost    Where do I Announce myself?  Where is my Discovery Service
+ */
 const main = () => {
   console.log("Starting Cluster");
   let options = {};
