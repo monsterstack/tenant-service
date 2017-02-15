@@ -4,7 +4,7 @@
  * Generated File as a result of Service Scaffolding.  Edit at your own risk.
  */
 const http = require('http');
-const BASE_PATH = './code';
+const BASE_PATH = './';
 
 const fetchConfig = (configHost, configPort, serviceName, stage, cb) => {
   let path = `/v2/keys/${serviceName}-${stage}`;
