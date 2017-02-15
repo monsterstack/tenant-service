@@ -8,5 +8,7 @@ services:
       - .:/code
     environment:
       - HOST_IP=${HOST_IP}
+      - SERVICE_NAME=EmailWorker
+      - STAGE=${STAGE}
     extra_hosts:
       - "cdsp.digitalfunk.io:${HOST_IP}"
