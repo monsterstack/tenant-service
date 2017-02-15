@@ -10,5 +10,7 @@ services:
       - HOST_IP=${HOST_IP}
       - SERVICE_NAME=EmailWorker
       - STAGE=${STAGE}
+      - CONFIG_HOST=${CONFIG_HOST}
+      - CONFIG_PORT=${CONFIG_PORT}
     extra_hosts:
       - "cdsp.digitalfunk.io:${HOST_IP}"
