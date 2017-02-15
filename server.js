@@ -12,8 +12,13 @@ const path = require('path');
  *                    or do we use the standard config.port.
  * --announce         ( true or false ) Do we announce ourselves to the Discovery Service
  * --discoveryHost ( Where do I Announce myself?  Where is my Discovery Service)
+ * --overrides     ( path for config overrides )
  */
 const main = () => {
+  if(optimist.argv.overrides) {
+    let overrides = require(optimist.argv.overrides);
+    _.merge(config, overrides);
+  }
   let announce = false;
   let useRandomWorkerPort = false;
   let announcement = require('./announcement.json');

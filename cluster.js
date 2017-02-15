@@ -20,6 +20,12 @@ const main = () => {
     options.discoveryHost = optimist.argv.discoveryHost;
   }
 
+  if(optimist.argv.overrides) {
+    let overrides = require(optimist.argv.overrides);
+    _.merge(config, overrides);
+    options.overridesPath = optimist.argv.overrides;
+  }
+
   let announcement = require('./announcement.json');
   let cluster = new Cluster("TenantService", announcement, options);
   //let exitHandler = proxy.exitHandlerFactory(cluster.id, model);
