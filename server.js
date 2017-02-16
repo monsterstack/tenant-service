@@ -4,6 +4,7 @@ const config = require('config');
 const optimist = require('optimist');
 const express = require('express');
 const path = require('path');
+const _ = require('lodash');
 
 /**
  * Start Server
