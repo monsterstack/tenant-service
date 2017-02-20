@@ -195,8 +195,8 @@
         ],
         "parameters": [
           {
-            "name": "search",
-            "description": "Text Search String",
+            "name": "tenant",
+            "description": "Tenant",
             "type": "object",
             "schema": {
               "$ref": "#/definitions/Tenant"

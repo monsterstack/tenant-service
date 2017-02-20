@@ -140,8 +140,8 @@ module.exports = function(app) {
    *    consumes:
    *      - application/json
    *    parameters:
-   *      - name: search
-   *        description: Text Search String
+   *      - name: tenant
+   *        description: tenant
    *        type: object
    *        schema:
    *          $ref: '#/definitions/Tenant'
