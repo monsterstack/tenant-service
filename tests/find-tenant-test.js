@@ -73,7 +73,8 @@ describe('find-tenant', () => {
     it('Find Tenant By Id should Succeed', (done) => {
         let service = {
             endpoint: 'http://localhost:8616',
-            schemaRoute: '/swagger.json'
+            schemaRoute: '/swagger.json',
+            _id: uuid.v1()
         };
 
         let apiBinding = new ApiBinding(service);
@@ -98,7 +99,8 @@ describe('find-tenant', () => {
     it('Find Tenant By Id should Fail with 404', (done) => {
         let service = {
             endpoint: 'http://localhost:8616',
-            schemaRoute: '/swagger.json'
+            schemaRoute: '/swagger.json',
+            _id: uuid.v1()
         };
 
         let apiBinding = new ApiBinding(service);
@@ -124,7 +126,8 @@ describe('find-tenant', () => {
     it('Find Page of Tenants should Succeed', (done) => {
         let service = {
             endpoint: 'http://localhost:8616',
-            schemaRoute: '/swagger.json'
+            schemaRoute: '/swagger.json',
+            _id: uuid.v1()
         };
 
         let apiBinding = new ApiBinding(service);
