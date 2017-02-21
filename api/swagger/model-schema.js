@@ -27,12 +27,9 @@
  *     type: object
  *     required:
  *        - cpuPercentUsage
- *        - totalMemPercentageUsage
  *        - loadAvg
  *     properties:
  *        cpuPercentUsage:
- *          type: number
- *        totalMemPercentageUsage:
  *          type: number
  *        loadAvg:
  *          type: number
