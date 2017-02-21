@@ -3,7 +3,9 @@ const ApiBinding = require('discovery-proxy').ApiBinding;
 const assert = require('assert');
 
 const startTestService = require('discovery-test-tools').startTestService;
+const sideLoadSecurityDescriptor = require('discovery-test-tools').sideLoadServiceDescriptor;
 
+const SECURITY_PORT = 12616;
 const uuid = require('node-uuid');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
@@ -14,6 +16,19 @@ describe('find-tenant', () => {
 
     let clientId = uuid.v1();
     let clientSecret = jwt.sign(clientId, 'shhhhh!');
+
+    let securityDescriptor = {
+        "docsPath": 'http://cloudfront.mydocs.com/tenant', 
+        "endpoint": `http://localhost:${SECURITY_PORT}`,
+        "healthCheckRoute":  "/health" ,
+        "region":  "us-east-1" ,
+        "schemaRoute":  "/swagger.json" ,
+        "stage":  "dev" ,
+        "status":  "Online" ,
+        "timestamp": Date.now(),
+        "type":  "SecurityService" ,
+        "version":  "v1"
+    };
 
     let tenantEntry = {
         "status" : "Active",
@@ -65,7 +80,18 @@ describe('find-tenant', () => {
             return startTenantService();
         }).then((service) => {
             tenantService = service;
-            done();
+            setTimeout(() => {
+                tenantService.getApp().dependencies = { types: ['SecurityService'] };
+                console.log(tenantService.getApp().dependencies);
+
+                sideLoadSecurityDescriptor(tenantService, securityDescriptor).then(() => {
+                    console.log(tenantService.getApp().dependencies);
+                    console.log(tenantService.getApp().proxy);
+                    done();
+                }).catch((err) => {
+                    done(err);
+                });
+            }, 1500);
         }).catch((err) => {
             done(err);
         });
