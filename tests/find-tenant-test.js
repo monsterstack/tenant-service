@@ -50,7 +50,7 @@ describe('find-tenant', () => {
      */
     const startTenantService = () => {
         let p = new Promise((resolve, reject) => {
-            startTestService('TenantService', (err, server) => {
+            startTestService('TenantService', {}, (err, server) => {
                 resolve(server);
             });
         });

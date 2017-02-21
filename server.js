@@ -64,6 +64,10 @@ const main = () => {
     server.loadHttpRoutes();
     server.listen().then(() => {
       console.log('Up and running..');
+      server.onProxyReady((proxy) => {
+        console.log("Yeah.. The Proxy is bound.");
+      });
+        
       if(announce === true) {
         server.announce();
       } else {

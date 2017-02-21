@@ -32,6 +32,10 @@ const main = () => {
   //cluster.bindExitHandler(exitHandler);
 
   cluster.start();
+
+  cluster.onProxyReady((proxy) => {
+    console.log("Yeah.. the proxy is bound");
+  });
 }
 
 

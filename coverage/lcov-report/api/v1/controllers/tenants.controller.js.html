@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for api/v1/controllers/tenants.controller.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">api/v1/controllers/</a> tenants.controller.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">29.85% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>20/67</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">29.85% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>20/67</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
+const debug = require('debug')('tenant-controller');
+const appRoot = require('app-root-path');
+&nbsp;
+const HttpStatus = require('http-status');
+const tenantModel = require('tenant-model').model;
+const ServiceError = require('core-server').ServiceError;
+const Tenant = tenantModel.Tenant;
+&nbsp;
+const TenantService = require(appRoot + '/services/tenantService');
+&nbsp;
+/**
+ * Build Page Descriptor
+ */
+const buildPageDescriptor = (query) =&gt; {
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    page: query.page || 0,
+    size: query.size || 10
+  }
+}
+&nbsp;
+/**
+ * Get Tenant By Api Key
+ * @Todo: Response always contains {} when 404
+ */
+const getTenantByApiKey = (app) =&gt; {
+  return (req, res) =&gt; {
+<span class="cstat-no" title="statement not covered" >    let apiKey = req.params.apiKey;</span>
+<span class="cstat-no" title="statement not covered" >    let tenantService = new TenantService();</span>
+    // Try to find by apiKey
+<span class="cstat-no" title="statement not covered" >    console.log(apiKey);</span>
+<span class="cstat-no" title="statement not covered" >    tenantService.findTenantByApiKey(apiKey).then((result) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if(result) {</span>
+<span class="cstat-no" title="statement not covered" >        res.status(HttpStatus.OK).send(result);</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        let errorResponse = new ServiceError(HttpStatus.NOT_FOUND, "Tenant not found");</span>
+<span class="cstat-no" title="statement not covered" >        errorResponse.writeResponse(res);</span>
+      }
+    }).catch((err) =&gt; {
+<span class="cstat-no" title="statement not covered" >      if(err instanceof Error) {</span>
+<span class="cstat-no" title="statement not covered" >        err.writeResponse(res);</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);</span>
+      }
+    });
+  }
+}
+&nbsp;
+const getTenant = (app) =&gt; {
+  return (req, res) =&gt; {
+<span class="cstat-no" title="statement not covered" >    let id = req.params.id;</span>
+    // validate id requirements.  If invalid return BAD_REQUEST
+<span class="cstat-no" title="statement not covered" >    let tenantService = new TenantService();</span>
+<span class="cstat-no" title="statement not covered" >    tenantService.findTenantById(id).then((result) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >       if(result) {</span>
+<span class="cstat-no" title="statement not covered" >         res.status(HttpStatus.OK).send(result);</span>
+       } else {
+<span class="cstat-no" title="statement not covered" >         new ServiceError(HttpStatus.NOT_FOUND, "Not found").writeResponse(res);</span>
+       }
+     }).catch((err) =&gt; {
+<span class="cstat-no" title="statement not covered" >       let errResponse = new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message);</span>
+<span class="cstat-no" title="statement not covered" >       console.log(errResponse.toJSON());</span>
+<span class="cstat-no" title="statement not covered" >       errResponse.writeResponse(res);</span>
+    });
+  }
+}
+&nbsp;
+const findTenants = (app) =&gt; {
+  return (req, res) =&gt; {
+<span class="cstat-no" title="statement not covered" >    let url = require('url');</span>
+<span class="cstat-no" title="statement not covered" >    let url_parts = url.parse(req.url, true);</span>
+<span class="cstat-no" title="statement not covered" >    let query = url_parts.query;</span>
+<span class="cstat-no" title="statement not covered" >    let search = query.search;</span>
+<span class="cstat-no" title="statement not covered" >    let pageDescriptor = buildPageDescriptor(query);</span>
+<span class="cstat-no" title="statement not covered" >    let tenantService = new TenantService();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if(search) {</span>
+<span class="cstat-no" title="statement not covered" >      tenantService.findTenants(search, pageDescriptor).then((page) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        res.status(HttpStatus.OK).send(page);</span>
+      }).catch((err) =&gt; {
+<span class="cstat-no" title="statement not covered" >        new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);</span>
+      });
+    } else {
+<span class="cstat-no" title="statement not covered" >      tenantService.allTenants(pageDescriptor).then((page) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        res.status(HttpStatus.OK).send(page);</span>
+      }).catch((err) =&gt; {
+<span class="cstat-no" title="statement not covered" >        new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);</span>
+      });
+    }
+  }
+}
+&nbsp;
+const saveTenant = (app) =&gt; {
+  return (req, res) =&gt; {
+<span class="cstat-no" title="statement not covered" >    let tenant = req.body;</span>
+<span class="cstat-no" title="statement not covered" >    console.log(tenant);</span>
+<span class="cstat-no" title="statement not covered" >    console.log(tenant.name);</span>
+<span class="cstat-no" title="statement not covered" >    let tenantService = new TenantService();</span>
+<span class="cstat-no" title="statement not covered" >    let tenantName = tenant.name;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    tenantService.findTenantByName(tenantName).then((result) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        if (result ){</span>
+<span class="cstat-no" title="statement not covered" >          res.status(HttpStatus.BAD_REQUEST, "A tenant with that name already exists");</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          tenantService.saveTenant(tenant).then((result) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >             console.log(result);</span>
+<span class="cstat-no" title="statement not covered" >             res.status(HttpStatus.OK).send(result);</span>
+           }).catch((err) =&gt; {
+<span class="cstat-no" title="statement not covered" >              new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);</span>
+          });
+        }
+    }).catch((err) =&gt; {
+<span class="cstat-no" title="statement not covered" >      new Error(HttpStatus.OK, err.message).writeResponse(res);</span>
+   });
+ }
+}
+&nbsp;
+/* Public */
+exports.getTenant = getTenant;
+exports.getTenantByApiKey = getTenantByApiKey;
+exports.saveTenant = saveTenant;
+exports.findTenants = findTenants;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Feb 21 2017 13:38:26 GMT-0500 (EST)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

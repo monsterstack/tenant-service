@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
  */
 const startTenantService = () => {
     let p = new Promise((resolve, reject) => {
-        startTestService('TenantService', (err, server) => {
+        startTestService('TenantService', {}, (err, server) => {
             resolve(server);
         });
     });
