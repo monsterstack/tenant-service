@@ -52,6 +52,8 @@
   "devDependencies": {
     "mocha-better-spec-reporter": "^3.1.0",
     "mocha-mongoose": "1.2.0",
-    "mongoose": "^4.8.4"
+    "mongoose": "^4.8.4",
+    "discovery-test-tools": "https://github.com/monsterstack/discovery-test-tools#development"
+
   }
 }

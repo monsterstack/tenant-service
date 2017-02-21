@@ -2,7 +2,7 @@
 const ApiBinding = require('discovery-proxy').ApiBinding;
 const assert = require('assert');
 
-const tenantServiceFactory = require('./resources/serviceFactory').tenantServiceFactory;
+const startTestService = require('discovery-test-tools').startTestService;
 
 const mongoose = require('mongoose');
 
@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
  */
 const startTenantService = () => {
     let p = new Promise((resolve, reject) => {
-        tenantServiceFactory('TenantService', (err, server) => {
+        startTestService('TenantService', (err, server) => {
             resolve(server);
         });
     });
