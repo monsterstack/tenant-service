@@ -91,7 +91,7 @@ describe('find-tenant', () => {
                 }).catch((err) => {
                     done(err);
                 });
-            }, 1500);
+            }, 1800);
         }).catch((err) => {
             done(err);
         });
