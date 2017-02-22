@@ -3,12 +3,11 @@ const appRoot = require('app-root-path');
 const HttpStatus = require('http-status');
 const ServiceError = require('core-server').ServiceError;
 const SwaggerService = require('core-server').SwaggerService;
-const ip = require('ip');
-const swagger = require(appRoot + '/api/swagger/swagger.json');
 
 const getSwagger = (app) => {
   return (req, res) => {
-    let swaggerService = new SwaggerService('/api/v1');
+    let baseSwagger = require(appRoot + '/api/swagger/swagger.json');
+    let swaggerService = new SwaggerService('/api/v1', baseSwagger);
     swaggerService.getSwagger().then((swagger) => {
       res.status(HttpStatus.OK).send(swagger);
     }).catch((err) => {
