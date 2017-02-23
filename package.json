@@ -4,7 +4,7 @@
   "description": "Tenant Service",
   "main": "server.js",
   "scripts": {
-    "test": "mocha ./tests/*-test.js --reporter nyan"
+    "test": "cd ./tests && mocha ./*-test.js --reporter nyan"
   },
   "author": "",
   "license": "ISC",

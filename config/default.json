@@ -1,7 +1,7 @@
 {
   "port": 8616,
   "db": {
-    "host": "cdsp.digitalfunk.io",
+    "host": "mongo.digitalfunk.io",
     "port": 27017
   },
   "discovery": {
@@ -14,7 +14,7 @@
     "port": 9600
   },
   "redis": {
-    "host": "cdsp.digitalfunk.io",
+    "host": "redis.digitalfunk.io",
     "port": 6379
   },
   "websockets": {

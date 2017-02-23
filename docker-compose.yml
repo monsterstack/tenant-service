@@ -8,9 +8,15 @@ services:
       - .:/code
     environment:
       - HOST_IP=${HOST_IP}
-      - SERVICE_NAME=EmailWorker
+      - REDIS_HOST_IP=${REDIS_HOST_IP}
+      - MONGO_HOST_IP=${MONGO_HOST_IP}
+      - ETCD_HOST_IP=${ETCD_HOST_IP}
+      - SERVICE_NAME=TenantService
       - STAGE=${STAGE}
       - CONFIG_HOST=${CONFIG_HOST}
       - CONFIG_PORT=${CONFIG_PORT}
     extra_hosts:
       - "cdsp.digitalfunk.io:${HOST_IP}"
+      - "etcd.digitalfunk.io:${ETCD_HOST_IP}"
+      - "mongo.digitalfunk.io:${MONGO_HOST_IP}"
+      - "redis.digitalfunk.io:${REDIS_HOST_IP}"   
