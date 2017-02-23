@@ -1,5 +1,5 @@
 {
-  "port": 8616,
+  "port": 0,
   "db": {
     "host": "cdsp.digitalfunk.io",
     "port": 27017

@@ -98,8 +98,9 @@ describe('find-tenant', () => {
     });
 
     it('Find Tenant By Id should Succeed', (done) => {
+        console.log(`Listening port is ${tenantService.getApp().listeningPort}`);
         let service = {
-            endpoint: 'http://localhost:8616',
+            endpoint: `http://localhost:${tenantService.getApp().listeningPort}`,
             schemaRoute: '/swagger.json',
             _id: uuid.v1()
         };
@@ -124,11 +125,13 @@ describe('find-tenant', () => {
 
 
     it('Find Tenant By Id should Fail with 404', (done) => {
+        console.log(`Listening port is ${tenantService.getApp().listeningPort}`);
         let service = {
-            endpoint: 'http://localhost:8616',
+            endpoint: `http://localhost:${tenantService.getApp().listeningPort}`,
             schemaRoute: '/swagger.json',
             _id: uuid.v1()
         };
+
 
         let apiBinding = new ApiBinding(service);
         
@@ -151,11 +154,13 @@ describe('find-tenant', () => {
     });
 
     it('Find Page of Tenants should Succeed', (done) => {
+        console.log(`Listening port is ${tenantService.getApp().listeningPort}`);
         let service = {
-            endpoint: 'http://localhost:8616',
+            endpoint: `http://localhost:${tenantService.getApp().listeningPort}`,
             schemaRoute: '/swagger.json',
             _id: uuid.v1()
         };
+
 
         let apiBinding = new ApiBinding(service);
         

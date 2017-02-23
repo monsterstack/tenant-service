@@ -73,7 +73,7 @@ describe('post-tenant', (done) => {
 
     it('Post Tenant with Success', (done) => {
         let service = {
-            endpoint: 'http://localhost:8616',
+            endpoint: `http://localhost:${tenantService.getApp().listeningPort}`,
             schemaRoute: '/swagger.json'
         };
 

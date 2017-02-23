@@ -32,7 +32,6 @@ describe('tenant-api-binding', () => {
    */
   it('api created when binding occurs', (done) => {
     console.log(`Listening port is ${server.getApp().listeningPort}`);
-    process.exit();
     let service = {
       endpoint: `http://localhost:${server.getApp().listeningPort}`,
       schemaRoute: '/swagger.json'
