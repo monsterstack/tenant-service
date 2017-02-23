@@ -1,0 +1,6 @@
+web:
+    networks:
+        - back-tier
+networks:
+    back-tier:
+        driver: overlay
