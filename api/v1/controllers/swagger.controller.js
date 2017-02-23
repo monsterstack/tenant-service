@@ -3,11 +3,17 @@ const appRoot = require('app-root-path');
 const HttpStatus = require('http-status');
 const ServiceError = require('core-server').ServiceError;
 const SwaggerService = require('core-server').SwaggerService;
+const config = require('config');
 
 const getSwagger = (app) => {
   return (req, res) => {
     let baseSwagger = require(appRoot + '/api/swagger/swagger.json');
-    let swaggerService = new SwaggerService('/api/v1', baseSwagger);
+    let options = {};
+    if(config.isTestCase === true) {
+      options.port = app.listeningPort;
+    }
+
+    let swaggerService = new SwaggerService('/api/v1', baseSwagger, options);
     swaggerService.getSwagger().then((swagger) => {
       res.status(HttpStatus.OK).send(swagger);
     }).catch((err) => {

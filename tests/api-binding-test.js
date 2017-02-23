@@ -6,7 +6,7 @@ describe('tenant-api-binding', () => {
   let Server = require('core-server').Server;
   let server = null;
   before((done) => {
-    server = new Server("TenantService", null, null, {});
+    server = new Server("TenantService", null, null, { useRandomWorkerPort: true });
 
     server.init().then(() => {
       server.loadHttpRoutes();
@@ -31,9 +31,10 @@ describe('tenant-api-binding', () => {
    * accurately described the operations / tags supported by the TenantService.
    */
   it('api created when binding occurs', (done) => {
-
+    console.log(`Listening port is ${server.getApp().listeningPort}`);
+    process.exit();
     let service = {
-      endpoint: 'http://localhost:8616',
+      endpoint: `http://localhost:${server.getApp().listeningPort}`,
       schemaRoute: '/swagger.json'
     };
     console.log("Creating Binding");
