@@ -1,4 +1,5 @@
-version: '2'
+version: '3'
+
 services:
     web:
         networks:
@@ -6,3 +7,5 @@ services:
 networks:
     back-tier:
         driver: overlay
+        ipam:
+          driver: default

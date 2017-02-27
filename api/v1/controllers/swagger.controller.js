@@ -14,6 +14,9 @@ const getSwagger = (app) => {
     if(!process.env.hasOwnProperty('randomWorkerPort') || process.env.randomWorkerPort === false) {
       options.port = app.listeningPort;
     }
+    
+    // Set IP Address - Host
+    options.host = app.listeningIp;
 
     let swaggerService = new SwaggerService('/api/v1', baseSwagger, options);
     swaggerService.getSwagger().then((swagger) => {
