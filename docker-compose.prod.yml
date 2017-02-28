@@ -6,6 +6,4 @@ services:
             - back-tier
 networks:
     back-tier:
-        driver: overlay
-        ipam:
-          driver: default
+        external: true
