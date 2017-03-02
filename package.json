@@ -27,6 +27,7 @@
     "coffee-script": "^1.12.2",
     "config": "^1.25.1",
     "connect": "2.x",
+    "connect-middleware-response-time": "^1.0.0",
     "core-server": "https://github.com/monsterstack/core-server#development",
     "cors": "^2.8.1",
     "debug": "^2.6.0",
