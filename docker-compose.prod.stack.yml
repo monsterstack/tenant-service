@@ -6,6 +6,7 @@ services:
     hostname: tenant.digitalfunk.io
     ports:
       - "8616:8616"
+      - "8617:8617"
     networks:
       - back-tier
     volumes:
