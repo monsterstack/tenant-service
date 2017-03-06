@@ -81,7 +81,7 @@ describe('find-tenant', () => {
         }).then((service) => {
             tenantService = service;
             setTimeout(() => {
-                tenantService.getApp().dependencies = { types: ['SecurityService'] };
+                tenantService.getApp().dependencies = ['SecurityService'];
                 console.log(tenantService.getApp().dependencies);
 
                 sideLoadSecurityDescriptor(tenantService, securityDescriptor).then(() => {
