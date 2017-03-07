@@ -5,7 +5,7 @@
     "port": 27017
   },
   "discovery": {
-    "host": "10.10.11.116",
+    "host": "discovery.digitalfunk.io",
     "port": 7616
   },
   "stash": {

@@ -14,6 +14,7 @@ services:
     environment:
       - HOST_IP=${HOST_IP}
       - REDIS_HOST_IP=${REDIS_HOST_IP}
+      - DISCOVERY_HOST_IP=${DISCOVERY_HOST_IP}
       - ETCD_HOST_IP=${ETCD_HOST_IP}
       - MONGO_HOST_IP=${MONGO_HOST_IP}
       - SERVICE_NAME=TenantService
@@ -26,6 +27,7 @@ services:
       - "mongo.digitalfunk.io:${MONGO_HOST_IP}"
       - "etcd.digitalfunk.io:${ETCD_HOST_IP}"
       - "redis.digitalfunk.io:${REDIS_HOST_IP}"
+      - "discovery.digitalfunk.io:${DISCOVERY_HOST_IP}"
 networks:
     back-tier:
         external: true
