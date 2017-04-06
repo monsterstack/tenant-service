@@ -7,7 +7,7 @@ const tenantModel = require('tenant-model').model;
 const ServiceError = require('core-server').ServiceError;
 const Tenant = tenantModel.Tenant;
 
-const TenantService = require(appRoot + '/services/tenantService');
+const TenantService = require(appRoot + '/libs/services/tenantService');
 
 /**
  * Build Page Descriptor

@@ -15,6 +15,8 @@
  *    description: 'Everything you need to know about PageResponses'
  *  - name: tenants
  *    description: 'Everything you need to know about Tenants'
+ *  - name: applications
+ * 	  description: 'Everything you need to know about Applications'
  * definitions:
  *   Error:
  *     type: object
@@ -69,6 +71,27 @@
  *          type: array
  *          items:
  *            $ref: '#/definitions/Tenant'
+ * 	 Application:
+ * 		 type: object
+ * 		 required:
+ * 			 - name
+ * 			 - apiKey
+ * 			 - apiSecret
+ * 			 - tenantId
+ * 			 - scope
+ * 		 properties:
+ * 			 id:
+ * 				 type: string
+ * 			 name: 
+ * 				 type: string
+ * 			 apiKey: 
+ * 				 type: string
+ * 			 apiSecret: 
+ * 				 type: string
+ * 			 scope:
+ * 				 type: array
+ * 				 items:
+ * 					 type: string	 
  *   Tenant:
  *     type: object
  *     required:
