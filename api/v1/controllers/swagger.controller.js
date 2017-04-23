@@ -20,7 +20,6 @@ const getSwagger = (app) => {
 
     let swaggerService = new SwaggerService('/api/v1', baseSwagger, options);
     swaggerService.getSwagger().then((swagger) => {
-      console.log(swagger);
       res.status(HttpStatus.OK).send(swagger);
     }).catch((err) => {
       new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);

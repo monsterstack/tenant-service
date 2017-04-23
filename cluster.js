@@ -10,7 +10,6 @@ const optimist = require('optimist');
  * --discoveryHost    Where do I Announce myself?  Where is my Discovery Service
  */
 const main = () => {
-  console.log("Starting Cluster");
   let options = {};
   if(optimist.argv.numWorkers) {
     options.numWorkers = optimist.argv.numWorkers;
@@ -34,7 +33,6 @@ const main = () => {
   cluster.start();
 
   cluster.onProxyReady((proxy) => {
-    console.log("Yeah.. the proxy is bound");
     setInterval(() => {
       cluster.reannounce(config);
     }, 2*60*1000);

@@ -53,7 +53,6 @@ describe('find-tenant', () => {
             // get the connection
             let conn = mongoose.createConnection(url);
             conn.collection('tenants').insertMany([tenant], (err, result) => {
-                console.log(result);
                 tenantEntry._id = result.ops[0]._id;
                 resolve(result.ops[0]);
               });
@@ -84,11 +83,8 @@ describe('find-tenant', () => {
             tenantService = service;
             setTimeout(() => {
                 tenantService.getApp().dependencies = ['SecurityService'];
-                console.log(tenantService.getApp().dependencies);
 
                 sideLoadSecurityDescriptor(tenantService, securityDescriptor).then(() => {
-                    console.log(tenantService.getApp().dependencies);
-                    console.log(tenantService.getApp().proxy);
                     done();
                   }).catch((err) => {
                     done(err);
@@ -100,7 +96,6 @@ describe('find-tenant', () => {
       });
 
     it('Find Tenant By Id should Succeed', (done) => {
-        console.log(`Listening port is ${tenantService.getApp().listeningPort}`);
         let service = {
             endpoint: `http://localhost:${tenantService.getApp().listeningPort}`,
             schemaRoute: '/swagger.json',
@@ -125,7 +120,6 @@ describe('find-tenant', () => {
       });
 
     it('Find Tenant By Id should Fail with 404', (done) => {
-        console.log(`Listening port is ${tenantService.getApp().listeningPort}`);
         let service = {
             endpoint: `http://localhost:${tenantService.getApp().listeningPort}`,
             schemaRoute: '/swagger.json',
@@ -152,7 +146,6 @@ describe('find-tenant', () => {
       });
 
     it('Find Page of Tenants should Succeed', (done) => {
-        console.log(`Listening port is ${tenantService.getApp().listeningPort}`);
         let service = {
             endpoint: `http://localhost:${tenantService.getApp().listeningPort}`,
             schemaRoute: '/swagger.json',

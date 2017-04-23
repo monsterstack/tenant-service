@@ -11,15 +11,12 @@ describe('tenant-api-binding', () => {
     server.init().then(() => {
       server.loadHttpRoutes();
       server.listen().then(() => {
-        console.log('Up and running..');
         done();
       }).catch((err) => {
-        console.log(err);
-        done();
+        done(err);
       });
     }).catch((err) => {
-      console.log(err);
-      done();
+      done(err);
     });
 
   });
@@ -31,7 +28,6 @@ describe('tenant-api-binding', () => {
    * accurately described the operations / tags supported by the TenantService.
    */
   it('api created when binding occurs', (done) => {
-    console.log(`Listening port is ${server.getApp().listeningPort}`);
     let service = {
       endpoint: `http://localhost:${server.getApp().listeningPort}`,
       schemaRoute: '/swagger.json',

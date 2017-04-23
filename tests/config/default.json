@@ -19,5 +19,6 @@
   },
   "websockets": {
     "enabled": true
-  }
+  },
+  "realizationDependencyCheck": false
 }

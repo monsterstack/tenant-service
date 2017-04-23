@@ -57,11 +57,7 @@ describe('post-tenant', (done) => {
             tenantService = server;
             setTimeout(() => {
                 tenantService.getApp().dependencies = { types: ['SecurityService'] };
-                console.log(tenantService.getApp().dependencies);
-
                 sideLoadSecurityDescriptor(tenantService, securityDescriptor).then(() => {
-                    console.log(tenantService.getApp().dependencies);
-                    console.log(tenantService.getApp().proxy);
                     done();
                   }).catch((err) => {
                     done(err);
