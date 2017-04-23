@@ -3,7 +3,7 @@
 const controller = require('../controllers/tenants.controller.js');
 
 /** Public **/
-module.exports = function(app) {
+module.exports = function (app) {
   /**
    * @swagger
    * /tenants/{id}:
@@ -166,4 +166,4 @@ module.exports = function(app) {
    */
   app.post('/api/v1/tenants', app.realizationCheck.dependenciesAreRealized(),
         app.authCheck.fastPass(), app.authCheck.authCheck(), controller.saveTenant(app));
-}
+};

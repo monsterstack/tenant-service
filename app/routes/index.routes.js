@@ -4,4 +4,4 @@ const controller = require(appRoot + '/app/controllers/index.controller');
 
 module.exports = (app) => {
   app.get('/', controller.getIndex(app));
-}
+};

@@ -15,9 +15,9 @@ const TenantService = require(appRoot + '/libs/services/tenantService');
 const buildPageDescriptor = (query) => {
   return {
     page: query.page || 0,
-    size: query.size || 10
-  }
-}
+    size: query.size || 10,
+  };
+};
 
 /**
  * Get Tenant By Api Key
@@ -27,54 +27,56 @@ const getTenantByApiKey = (app) => {
   return (req, res) => {
     let apiKey = req.params.apiKey;
     let tenantService = new TenantService();
+
     // Try to find by apiKey
     console.log(apiKey);
     tenantService.findTenantByApiKey(apiKey).then((result) => {
-      if(result) {
+      if (result) {
         res.status(HttpStatus.OK).send(result);
       } else {
-        let errorResponse = new ServiceError(HttpStatus.NOT_FOUND, "Tenant not found");
+        let errorResponse = new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found');
         errorResponse.writeResponse(res);
       }
     }).catch((err) => {
-      if(err instanceof Error) {
+      if (err instanceof Error) {
         err.writeResponse(res);
       } else {
         new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
       }
     });
-  }
-}
+  };
+};
 
 const getTenant = (app) => {
   return (req, res) => {
     let id = req.params.id;
+
     // validate id requirements.  If invalid return BAD_REQUEST
     let tenantService = new TenantService();
     tenantService.findTenantById(id).then((result) => {
-       if(result) {
-         res.status(HttpStatus.OK).send(result);
-       } else {
-         new ServiceError(HttpStatus.NOT_FOUND, "Not found").writeResponse(res);
-       }
-     }).catch((err) => {
-       let errResponse = new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message);
-       console.log(errResponse.toJSON());
-       errResponse.writeResponse(res);
+      if (result) {
+        res.status(HttpStatus.OK).send(result);
+      } else {
+        new ServiceError(HttpStatus.NOT_FOUND, 'Not found').writeResponse(res);
+      }
+    }).catch((err) => {
+      let errResponse = new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message);
+      console.log(errResponse.toJSON());
+      errResponse.writeResponse(res);
     });
-  }
-}
+  };
+};
 
 const findTenants = (app) => {
   return (req, res) => {
     let url = require('url');
-    let url_parts = url.parse(req.url, true);
-    let query = url_parts.query;
+    let urlParts = url.parse(req.url, true);
+    let query = urlParts.query;
     let search = query.search;
     let pageDescriptor = buildPageDescriptor(query);
     let tenantService = new TenantService();
 
-    if(search) {
+    if (search) {
       tenantService.findTenants(search, pageDescriptor).then((page) => {
         res.status(HttpStatus.OK).send(page);
       }).catch((err) => {
@@ -87,8 +89,8 @@ const findTenants = (app) => {
         new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
       });
     }
-  }
-}
+  };
+};
 
 const saveTenant = (app) => {
   return (req, res) => {
@@ -99,21 +101,21 @@ const saveTenant = (app) => {
     let tenantName = tenant.name;
 
     tenantService.findTenantByName(tenantName).then((result) => {
-        if (result ){
-          res.status(HttpStatus.BAD_REQUEST, "A tenant with that name already exists");
+        if (result) {
+          res.status(HttpStatus.BAD_REQUEST, 'A tenant with that name already exists');
         } else {
           tenantService.saveTenant(tenant).then((result) => {
-             console.log(result);
-             res.status(HttpStatus.OK).send(result);
-           }).catch((err) => {
+            console.log(result);
+            res.status(HttpStatus.OK).send(result);
+          }).catch((err) => {
               new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
-          });
+            });
         }
-    }).catch((err) => {
+      }).catch((err) => {
       new Error(HttpStatus.OK, err.message).writeResponse(res);
-   });
- }
-}
+    });
+  };
+};
 
 /* Public */
 exports.getTenant = getTenant;

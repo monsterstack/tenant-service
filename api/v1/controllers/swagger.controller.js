@@ -11,10 +11,10 @@ const getSwagger = (app) => {
     let options = {};
 
     console.log(`App listening port is ${app.listeningPort}`);
-    if(!process.env.hasOwnProperty('randomWorkerPort') || process.env.randomWorkerPort === false) {
+    if (!process.env.hasOwnProperty('randomWorkerPort') || process.env.randomWorkerPort === false) {
       options.port = app.listeningPort;
     }
-    
+
     // Set IP Address - Host
     options.host = app.listeningIp;
 
@@ -25,8 +25,8 @@ const getSwagger = (app) => {
     }).catch((err) => {
       new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
     });
-  }
-}
+  };
+};
 
 /* Public */
 exports.getSwagger = getSwagger;

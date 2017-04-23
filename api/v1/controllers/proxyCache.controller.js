@@ -12,8 +12,8 @@ const cache = (app) => {
     }).catch((error) => {
       new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
     });
-  }
-}
+  };
+};
 
 /* Public */
 exports.cache = cache;

@@ -8,7 +8,7 @@ class Error {
 
   toJSON() {
     return {
-      errorMessage: this.message
+      errorMessage: this.message,
     };
   }
 

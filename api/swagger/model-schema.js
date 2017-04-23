@@ -82,16 +82,16 @@
  * 		 properties:
  * 			 id:
  * 				 type: string
- * 			 name: 
+ * 			 name:
  * 				 type: string
- * 			 apiKey: 
+ * 			 apiKey:
  * 				 type: string
- * 			 apiSecret: 
+ * 			 apiSecret:
  * 				 type: string
  * 			 scope:
  * 				 type: array
  * 				 items:
- * 					 type: string	 
+ * 					 type: string
  *   Tenant:
  *     type: object
  *     required:

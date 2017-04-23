@@ -1,0 +1,6 @@
+{
+	"preset": "airbnb",
+	"requireShorthandArrowFunctions": false,
+	"maximumLineLength": 150
+
+}

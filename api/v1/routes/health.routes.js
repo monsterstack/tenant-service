@@ -22,5 +22,5 @@ module.exports = (app) => {
    *        schema:
    *          $ref: '#/definitions/Health'
    */
-    app.get('/health', controller.getHealth(app));
-}
+  app.get('/health', controller.getHealth(app));
+};

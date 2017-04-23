@@ -6,7 +6,7 @@ describe('tenant-api-binding', () => {
   let Server = require('core-server').Server;
   let server = null;
   before((done) => {
-    server = new Server("TenantService", null, null, { useRandomWorkerPort: true });
+    server = new Server('TenantService', null, null, { useRandomWorkerPort: true });
 
     server.init().then(() => {
       server.loadHttpRoutes();
@@ -34,19 +34,17 @@ describe('tenant-api-binding', () => {
     console.log(`Listening port is ${server.getApp().listeningPort}`);
     let service = {
       endpoint: `http://localhost:${server.getApp().listeningPort}`,
-      schemaRoute: '/swagger.json'
+      schemaRoute: '/swagger.json',
     };
-    console.log("Creating Binding");
     let apiBinding = new ApiBinding(service);
 
     apiBinding.bind().then((service) => {
-      console.log(`Checking Api...`);
-      if(service.api === undefined) {
-        done(new Error("Api is null"));
-      } else if(service.api.health === undefined) {
-        done(new Error("Health Api is null"));
-      } else if(service.api.tenants === undefined) {
-        done(new Error("Tenants Api is null"));
+      if (service.api === undefined) {
+        done(new Error('Api is null'));
+      } else if (service.api.health === undefined) {
+        done(new Error('Health Api is null'));
+      } else if (service.api.tenants === undefined) {
+        done(new Error('Tenants Api is null'));
       } else {
         done();
       }

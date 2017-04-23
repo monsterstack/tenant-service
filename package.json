@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "cd ./tests && mocha ./*-test.js --reporter nyan",
+    "fixStyle": "jscs --fix app api libs tests",
+    "checkStyle": "jscs app api libs tests --reporter unix",
     "docker-build": "docker-compose --host ${DOCKER_REGISTRY_HOST} -f docker-compose.yml -f docker-compose.prod.yml build",
     "docker-deploy": "docker --host ${SWARM_HOST} stack deploy -c ./docker-compose.prod.stack.yml tenantservice_web"
   },

@@ -2,8 +2,6 @@
 const model = require('tenant-model').model;
 
 class TenantService {
-  constructor() {
-  }
 
   findTenantById(id) {
     return model.findTenant(id);
