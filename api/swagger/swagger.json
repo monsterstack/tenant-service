@@ -6,6 +6,257 @@
   },
   "swagger": "2.0",
   "paths": {
+    "/accounts": {
+      "post": {
+        "summary": "Save Account",
+        "description": "Save Account",
+        "operationId": "saveAccount",
+        "tags": [
+          "accounts"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "account",
+            "description": "account",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Account"
+            },
+            "in": "body",
+            "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Account",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Account"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{id}": {
+      "get": {
+        "summary": "Get Account By Id",
+        "description": "Get Account By Id",
+        "operationId": "getAccount",
+        "tags": [
+          "accounts"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Id of Account",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Account"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/apps": {
+      "post": {
+        "summary": "Save Application",
+        "description": "Save Application",
+        "operationId": "saveApplication",
+        "tags": [
+          "applications"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "application",
+            "description": "application",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Application"
+            },
+            "in": "body",
+            "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Application"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get Applications",
+        "description": "Get Page of Application(s)",
+        "operationId": "getApplications",
+        "tags": [
+          "applications"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "description": "Text Search String",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "page",
+            "description": "Page Number ( 0 index based )",
+            "type": "integer",
+            "format": "int64",
+            "required": false
+          },
+          {
+            "name": "size",
+            "description": "Page Size - default 10",
+            "type": "integer",
+            "format": "int64",
+            "required": false
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PageResponse",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Application"
+            }
+          }
+        }
+      }
+    },
+    "/apps/{id}": {
+      "get": {
+        "summary": "Get Application By Id",
+        "description": "Get Application By Id",
+        "operationId": "getApplication",
+        "tags": [
+          "applications"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Id of Application",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Application"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "description": "Get Health of Service",
@@ -196,7 +447,56 @@
         "parameters": [
           {
             "name": "tenant",
+            "description": "tenant",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Tenant"
+            },
+            "in": "body",
+            "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
+          }
+        ],
+        "responses": {
+          "201": {
             "description": "Tenant",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Tenant"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Tenant",
+        "description": "Update Tenant",
+        "operationId": "updateTenant",
+        "tags": [
+          "tenants"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "tenant",
+            "description": "tenant",
             "type": "object",
             "schema": {
               "$ref": "#/definitions/Tenant"
@@ -247,14 +547,10 @@
       "type": "object",
       "required": [
         "cpuPercentUsage",
-        "totalMemPercentageUsage",
         "loadAvg"
       ],
       "properties": {
         "cpuPercentUsage": {
-          "type": "number"
-        },
-        "totalMemPercentageUsage": {
           "type": "number"
         },
         "loadAvg": {
@@ -350,6 +646,50 @@
           "format": "date"
         }
       }
+    },
+    "Application": {
+      "type": "object",
+      "required": [
+        "name",
+        "timestamp",
+        "status",
+        "apiKey",
+        "apiSecret",
+        "scope"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "apiSecret": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timestamp": {
+          "type": "number",
+          "format": "date"
+        }
+      }
     }
   },
   "responses": {},
@@ -375,6 +715,10 @@
     {
       "name": "pageResponses",
       "description": "Everything you need to know about PageResponses"
+    },
+    {
+      "name": "applications",
+      "description": "Everything you need to know about Applications"
     },
     {
       "name": "tenants",

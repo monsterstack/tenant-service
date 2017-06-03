@@ -1,5 +1,8 @@
 'use strict';
 
+//   app.get('/api/v1/tenants', app.realizationCheck.dependenciesAreRealized(),
+//         app.authCheck.fastPass(), app.authCheck.authCheck(), controller.findTenants(app));
+
 const controller = require('../controllers/tenants.controller.js');
 
 /** Public **/
@@ -41,7 +44,7 @@ module.exports = function (app) {
    *          $ref: '#/definitions/Error'
    */
   app.get('/api/v1/tenants/:id', app.realizationCheck.dependenciesAreRealized(),
-            app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getTenant(app));
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getTenant(app));
 
   /**
    * @swagger
@@ -80,7 +83,7 @@ module.exports = function (app) {
    *          $ref: '#/definitions/Error'
    */
   app.get('/api/v1/tenants/_apiKey/:apiKey', app.realizationCheck.dependenciesAreRealized(),
-        app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getTenantByApiKey(app));
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getTenantByApiKey(app));
 
   /**
    * @swagger
@@ -124,7 +127,7 @@ module.exports = function (app) {
    *          $ref: '#/definitions/Tenant'
    */
   app.get('/api/v1/tenants', app.realizationCheck.dependenciesAreRealized(),
-      app.authCheck.fastPass(), app.authCheck.authCheck(), controller.findTenants(app));
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.findTenants(app));
 
   /**
    * @swagger
@@ -133,6 +136,47 @@ module.exports = function (app) {
    *    summary: Save Tenant
    *    description: Save Tenant
    *    operationId: saveTenant
+   *    tags:
+   *      - tenants
+   *    produces:
+   *      - application/json
+   *    consumes:
+   *      - application/json
+   *    parameters:
+   *      - name: tenant
+   *        description: tenant
+   *        type: object
+   *        schema:
+   *          $ref: '#/definitions/Tenant'
+   *        in: body
+   *        required: true
+   *      - name: x-fast-pass
+   *        description: Bypass Auth
+   *        type: boolean
+   *        in: header
+   *        require: false
+   *    responses:
+   *      201:
+   *        description: Tenant
+   *        type: object
+   *        schema:
+   *          $ref: '#/definitions/Tenant'
+   *      400:
+   *        description: Bad request
+   *        type: object
+   *        schema:
+   *          $ref: '#/definitions/Error'
+   */
+  app.post('/api/v1/tenants', app.realizationCheck.dependenciesAreRealized(),
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.saveTenant(app));
+
+  /**
+   * @swagger
+   * /tenants:
+   *  put:
+   *    summary: Update Tenant
+   *    description: Update Tenant
+   *    operationId: updateTenant
    *    tags:
    *      - tenants
    *    produces:
@@ -164,6 +208,6 @@ module.exports = function (app) {
    *        schema:
    *          $ref: '#/definitions/Error'
    */
-  app.post('/api/v1/tenants', app.realizationCheck.dependenciesAreRealized(),
-        app.authCheck.fastPass(), app.authCheck.authCheck(), controller.saveTenant(app));
+  app.put('/api/v1/tenants', app.realizationCheck.dependenciesAreRealized(),
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.updateTenant(app));
 };

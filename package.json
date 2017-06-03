@@ -4,7 +4,9 @@
   "description": "Tenant Service",
   "main": "server.js",
   "scripts": {
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files --presets es2015,stage-2",
     "test": "cd ./tests && mocha ./*-test.js --reporter nyan",
+    "generateSwagger": "swagger-jsdoc -d ./api/swagger/info.js ./api/swagger/model-schema.js ./api/v1/routes/*.js && mv swagger.json ./api/swagger/swagger.json",
     "fixStyle": "jscs --fix app api libs tests",
     "checkStyle": "jscs app api libs tests --reporter unix",
     "docker-build": "docker-compose --host ${DOCKER_REGISTRY_HOST} -f docker-compose.yml -f docker-compose.prod.yml build",
@@ -21,11 +23,9 @@
   },
   "homepage": "https://github.com/monsterstack/tenant-service#readme",
   "dependencies": {
-    "app-root-path": "^2.0.1",
     "app-context": "https://github.com/monsterstack/app-context#development",
+    "app-root-path": "^2.0.1",
     "async": "^2.1.4",
-    "babel-cli": "^6.18.0",
-    "babel-preset-node6": "^11.0.0",
     "bluebird": "^3.4.7",
     "coffee-script": "^1.12.2",
     "config": "^1.25.1",
@@ -42,6 +42,7 @@
     "http-status": "^0.2.3",
     "ip": "^1.1.4",
     "lodash": "^4.17.4",
+    "meanie-mongoose-to-json": "^1.2.1",
     "needle": "^1.4.3",
     "node-uuid": "^1.4.7",
     "optimist": "^0.6.1",
@@ -57,9 +58,16 @@
     "winston": "^2.3.0"
   },
   "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-register": "^6.24.1",
     "discovery-test-tools": "https://github.com/monsterstack/discovery-test-tools#development",
     "mocha-better-spec-reporter": "^3.1.0",
     "mocha-mongoose": "1.2.0",
-    "mongoose": "^4.8.4"
+    "mongoose": "^4.8.4",
+    "rimraf": "^2.6.1",
+    "service-test-helpers": "https://github.com/monsterstack/service-test-helpers#development"
   }
 }

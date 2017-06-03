@@ -20,5 +20,9 @@
   "websockets": {
     "enabled": true
   },
-  "realizationDependencyCheck": false
+  "realizationDependencyCheck": false,
+  
+  "test": {
+    "tenantDbUrl": "mongodb://localhost:27017/cdspTenant"
+  }
 }

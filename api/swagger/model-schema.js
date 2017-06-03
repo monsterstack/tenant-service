@@ -13,10 +13,10 @@
  *    description: 'Everything you need to know about PageDescriptors'
  *  - name: pageResponses
  *    description: 'Everything you need to know about PageResponses'
+ *  - name: applications
+ *    description: 'Everything you need to know about Applications'
  *  - name: tenants
  *    description: 'Everything you need to know about Tenants'
- *  - name: applications
- * 	  description: 'Everything you need to know about Applications'
  * definitions:
  *   Error:
  *     type: object
@@ -71,27 +71,6 @@
  *          type: array
  *          items:
  *            $ref: '#/definitions/Tenant'
- * 	 Application:
- * 		 type: object
- * 		 required:
- * 			 - name
- * 			 - apiKey
- * 			 - apiSecret
- * 			 - tenantId
- * 			 - scope
- * 		 properties:
- * 			 id:
- * 				 type: string
- * 			 name:
- * 				 type: string
- * 			 apiKey:
- * 				 type: string
- * 			 apiSecret:
- * 				 type: string
- * 			 scope:
- * 				 type: array
- * 				 items:
- * 					 type: string
  *   Tenant:
  *     type: object
  *     required:
@@ -118,4 +97,35 @@
  *        timestamp:
  *          type: number
  *          format: date
+ *   Application:
+ *     type: object
+ *     required:
+ *       - name
+ *       - timestamp
+ *       - status
+ *       - apiKey
+ *       - apiSecret
+ *       - scope
+ *     properties:
+ *       id:
+ *         type: string
+ *       name:
+ *         type: string
+ *       status:
+ *         type: string
+ *       apiKey:
+ *         type: string
+ *       tenantId:
+ *         type: string
+ *       accountId:
+ *         type: string
+ *       apiSecret:
+ *         type: string
+ *       scope:
+ *         type: array
+ *         items:
+ *           type: string
+ *       timestamp:
+ *         type: number
+ *         format: date
  */

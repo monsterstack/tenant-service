@@ -18,7 +18,6 @@ describe('tenant-api-binding', () => {
     }).catch((err) => {
       done(err);
     });
-
   });
 
   /**
@@ -27,7 +26,7 @@ describe('tenant-api-binding', () => {
    * It is assumed the TenantService is serving up a valid swagger.json that
    * accurately described the operations / tags supported by the TenantService.
    */
-  it('api created when binding occurs', (done) => {
+  it('shall create api after binding', (done) => {
     let service = {
       endpoint: `http://localhost:${server.getApp().listeningPort}`,
       schemaRoute: '/swagger.json',
@@ -41,18 +40,18 @@ describe('tenant-api-binding', () => {
         done(new Error('Health Api is null'));
       } else if (service.api.tenants === undefined) {
         done(new Error('Tenants Api is null'));
+      } else if (service.api.applications === undefined) {
+        done(new Error('Applications Api is null'));
       } else {
         done();
       }
     }).catch((err) => {
-      assert(err === undefined, "Error didn't occur");
-      done();
+      done(err);
     });
-
   }).timeout(2000);
 
-  after(() => {
-
+  after((done) => {
+    done();
   });
 
 });

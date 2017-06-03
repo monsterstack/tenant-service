@@ -1,90 +1,66 @@
 'use strict';
+const config = require('config');
 const ApiBinding = require('discovery-proxy').ApiBinding;
-const assert = require('assert');
+const uuid = require('node-uuid');
 
 const startTestService = require('discovery-test-tools').startTestService;
 const sideLoadSecurityDescriptor = require('discovery-test-tools').sideLoadServiceDescriptor;
+const bindToGenericService = require('./utils').bindToGenericService;
+
+const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
+const assert = require('service-test-helpers').Assert;
+const newTenantEntry = require('./utils').newTenantEntry;
+const newSecurityDescriptor = require('./utils').newSecurityDescriptor;
 
 const SECURITY_PORT = 12616;
 
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
-/**
- * Start Tenant Service
- */
-const startTenantService = () => {
-    let p = new Promise((resolve, reject) => {
-        startTestService('TenantService', {}, (err, server) => {
-            resolve(server);
-          });
-      });
-    return p;
+const verifySaveTenantCreated = (expected, done) => {
+  return (response) => {
+    done();
   };
+};
+
+const verifySaveTenantErrorMissing = (done) => {
+  return (err) => {
+    done(err);
+  };
+};
 
 describe('post-tenant', (done) => {
     let tenantService = null;
-    let tenantUrl = 'mongodb://localhost:27017/cdspTenant';
+    let tenantUrl = config.test.tenantDbUrl;
 
-    let securityDescriptor = {
-        docsPath: 'http://cloudfront.mydocs.com/tenant',
-        endpoint: `http://localhost:${SECURITY_PORT}`,
-        healthCheckRoute:  '/health',
-        region:  'us-east-1',
-        schemaRoute:  '/swagger.json',
-        stage:  'dev',
-        status:  'Online',
-        timestamp: Date.now(),
-        type:  'SecurityService',
-        version:  'v1',
-      };
+    let securityDescriptor = newSecurityDescriptor(SECURITY_PORT);
 
-    let tenantEntry = {
-        status: 'Active',
-        timestamp: Date.now(),
-        name: 'Testerson',
-        services: [
-          {
-            name: 'DiscoveryService',
-            _id: mongoose.Types.ObjectId('58a98bad624702214a6e2ba9'),
-          },
-        ],
-      };
+    let clientId = uuid.v1();
+    let clientSecret = jwt.sign(clientId, 'shhhhh!');
 
+    let tenantEntry = newTenantEntry(clientId, clientSecret);
+    let serviceTestHelper = new ServiceTestHelper();
     let clearTenantDB  = require('mocha-mongoose')(tenantUrl, { noClear: true });
 
     before((done) => {
-        startTenantService().then((server) => {
-            tenantService = server;
-            setTimeout(() => {
-                tenantService.getApp().dependencies = { types: ['SecurityService'] };
-                sideLoadSecurityDescriptor(tenantService, securityDescriptor).then(() => {
-                    done();
-                  }).catch((err) => {
-                    done(err);
-                  });
-              }, 1500);
-          }).catch((err) => {
-            done(err);
-          });
+      serviceTestHelper.startTestService('TenantService', {}).then((server) => {
+        tenantService = server;
+        tenantService.getApp().dependencies = { types: ['SecurityService'] };
+        sideLoadSecurityDescriptor(tenantService, securityDescriptor).then(() => {
+          done();
+        }).catch((err) => {
+          done(err);
+        });
+      }).catch((err) => {
+        done(err);
       });
+    });
 
     it('Post Tenant with Success', (done) => {
-        let service = {
-            endpoint: `http://localhost:${tenantService.getApp().listeningPort}`,
-            schemaRoute: '/swagger.json',
-          };
-
-        let apiBinding = new ApiBinding(service);
-
-        apiBinding.bind().then((service) => {
+        serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
             if (service) {
-              service.api.tenants.saveTenant({ 'x-fast-pass': true, tenant: tenantEntry }, (tenant) => {
-                  if (tenant.obj) {
-                    done();
-                  }
-                }, (err) => {
-                  done(err);
-                });
+              let request = { 'x-fast-pass': true, tenant: tenantEntry };
+              service.api.tenants.saveTenant(request, verifySaveTenantCreated(tenantEntry, done), verifySaveTenantErrorMissing(done));
             } else {
               done(new Error('Tenant Service Not Found'));
             }

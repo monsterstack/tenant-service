@@ -26,6 +26,10 @@ class TenantService {
   saveTenant(tenant) {
     return model.saveTenant(tenant);
   }
+
+  updateTenant(tenant) {
+    return model.updateTenant(tenant);
+  }
 }
 
 module.exports = TenantService;

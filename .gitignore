@@ -1,3 +1,4 @@
 build.sh
+/dist
 /npm-debug.log
 /node_modules

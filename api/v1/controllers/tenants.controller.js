@@ -102,17 +102,39 @@ const saveTenant = (app) => {
 
     tenantService.findTenantByName(tenantName).then((result) => {
         if (result) {
-          res.status(HttpStatus.BAD_REQUEST, 'A tenant with that name already exists');
+          res.status(HttpStatus.CONFLICT, 'A tenant with that name already exists');
         } else {
           tenantService.saveTenant(tenant).then((result) => {
-            console.log(result);
             res.status(HttpStatus.OK).send(result);
           }).catch((err) => {
-              new Error(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+              new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
             });
         }
       }).catch((err) => {
-      new Error(HttpStatus.OK, err.message).writeResponse(res);
+        new ServiceError(HttpStatus.OK, err.message).writeResponse(res);
+      });
+  };
+};
+
+const updateTenant = (app) => {
+  return (req, res) => {
+    let tenant = req.body;
+    let tenantService = new TenantService();
+    let tenantName = tenant.name;
+
+    tenantService.findTenantById(tenant.id).then((result) => {
+        if (result) {
+          tenantService.updateTenant(tenant).then((result) => {
+            console.log(result);
+            res.status(HttpStatus.OK).send(result);
+          }).catch((err) => {
+              new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+            });
+        } else {
+          new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found').writeResponse(res);
+        }
+      }).catch((err) => {
+      new ServiceError(HttpStatus.OK, err.message).writeResponse(res);
     });
   };
 };
@@ -121,4 +143,5 @@ const saveTenant = (app) => {
 exports.getTenant = getTenant;
 exports.getTenantByApiKey = getTenantByApiKey;
 exports.saveTenant = saveTenant;
+exports.updateTenant = updateTenant;
 exports.findTenants = findTenants;

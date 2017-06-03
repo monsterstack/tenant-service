@@ -1,14 +1,82 @@
 'use strict';
-const ApiBinding = require('discovery-proxy').ApiBinding;
-const assert = require('assert');
 
-const startTestService = require('discovery-test-tools').startTestService;
+const HttpStatus = require('http-status');
+const ApiBinding = require('discovery-proxy').ApiBinding;
+const MongoHelper = require('./utils').MongoHelper;
+const newTenantEntry = require('./utils').newTenantEntry;
+const newSecurityDescriptor = require('./utils').newSecurityDescriptor;
+
+const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
+const assert = require('service-test-helpers').Assert;
 const sideLoadSecurityDescriptor = require('discovery-test-tools').sideLoadServiceDescriptor;
 
 const SECURITY_PORT = 12616;
 const uuid = require('node-uuid');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+
+const verifyGetTenantResponseOk = (expected, done) => {
+  return (response) => {
+    if (response.obj && response.status === HttpStatus.OK) {
+      assert.assertFieldExists('id', response.obj, 'Expected tenant.id to exist');
+      assert.assertFieldExists('name', response.obj, 'Expected tenant.name to exist');
+      assert.assertFieldExists('apiKey', response.obj, 'Expected tenant.apiKey to exist');
+      assert.assertFieldExists('apiSecret', response.obj, 'Expected tenant.apiSecret to exist');
+      assert.assertFieldExists('services', response.obj, 'Expected tenant.services to exist');
+      assert.assertFieldExists('status', response.obj, 'Expected tenant.status to exist');
+
+      assert.assertEquals(response.obj.name, expected.name, `Expected tenant.name to be ${expected.name}`);
+      assert.assertEquals(response.obj.apiKey, expected.apiKey, `Expected tenant.apiKey to be ${expected.apiKey}`);
+      assert.assertEquals(response.obj.apiSecret, expected.apiSecret, `Expected tenant.apiSecret to be ${expected.apiSecret}`);
+      assert.assertEquals(response.obj.services.length, expected.services.length,
+          `Expected tenant.services.length to be ${expected.services.length}`);
+      assert.assertEquals(response.obj.status, expected.status, `Expected tenant.status to be ${expected.status}`);
+
+      done();
+    } else
+      done(new Error('Expected Response to containe `obj`'));
+  };
+};
+
+const verifyGetTenantResponseMissing = (done) => {
+  return (response) => {
+    if (response) {
+      done(new Error('Expecing no response'));
+    } else {
+      done();
+    }
+  };
+};
+
+const verifyGetTenantsResponseOk = (done) => {
+  return (response) => {
+    if (response.status === HttpStatus.OK) {
+      if (response.obj.page) {
+        done();
+      } else {
+        done(new Error(`Expecting body with page field`));
+      }
+    } else {
+      done(new Error(`Expecting http status 200, received ${tenant.status}`));
+    }
+  };
+};
+
+const verifyGetTenantErrorMissing = (done) => {
+  return (err) => {
+    done(err);
+  };
+};
+
+const verifyTenantNotFoundErrorExists = (done) => {
+  return (err) => {
+    if (err.status === 404) {
+      done();
+    } else {
+      done(new Error(`Expected http status 404, received ${tenant.status}`));
+    }
+  };
+};
 
 describe('find-tenant', () => {
     let tenantService = null;
@@ -17,157 +85,66 @@ describe('find-tenant', () => {
     let clientId = uuid.v1();
     let clientSecret = jwt.sign(clientId, 'shhhhh!');
 
-    let securityDescriptor = {
-        docsPath: 'http://cloudfront.mydocs.com/tenant',
-        endpoint: `http://localhost:${SECURITY_PORT}`,
-        healthCheckRoute:  '/health',
-        region:  'us-east-1',
-        schemaRoute:  '/swagger.json',
-        stage:  'dev',
-        status:  'Online',
-        timestamp: Date.now(),
-        type:  'SecurityService',
-        version:  'v1',
-      };
-
-    let tenantEntry = {
-        status: 'Active',
-        apiSecret: clientSecret,
-        timestamp: Date.now(),
-        name: 'Testerson',
-        apiKey: clientId,
-        services: [
-          {
-            name: 'DiscoveryService',
-            _id: mongoose.Types.ObjectId('58a98bad624702214a6e2ba9'),
-          },
-        ],
-      };
-
+    let securityDescriptor = newSecurityDescriptor(SECURITY_PORT);
+    let tenantEntry = newTenantEntry(clientId, clientSecret);
     let clearTenantDB  = require('mocha-mongoose')(tenantUrl, { noClear: true });
 
-    let addTenant = (tenant) => {
-        let p = new Promise((resolve, reject) => {
-            let url = tenantUrl;
-
-            // get the connection
-            let conn = mongoose.createConnection(url);
-            conn.collection('tenants').insertMany([tenant], (err, result) => {
-                tenantEntry._id = result.ops[0]._id;
-                resolve(result.ops[0]);
-              });
-          });
-
-        return p;
-      };
-
-    /**
-     * Start Tenant Service
-     */
-    const startTenantService = () => {
-        let p = new Promise((resolve, reject) => {
-            startTestService('TenantService', {}, (err, server) => {
-                resolve(server);
-              });
-          });
-        return p;
-      };
+    let serviceTestHelper = new ServiceTestHelper();
 
     /**
      * Prepare the Test Suite
      */
     before((done) => {
-        addTenant(tenantEntry).then((tenant) => {
-            return startTenantService();
-          }).then((service) => {
+        let mongoHelper = new MongoHelper('tenants', tenantUrl);
+        mongoHelper.saveObject(tenantEntry).then((result) => {
+          tenantEntry._id = result._id;
+          return serviceTestHelper.startTestService('TenantService', {});
+        }).then((service) => {
             tenantService = service;
-            setTimeout(() => {
-                tenantService.getApp().dependencies = ['SecurityService'];
+            tenantService.getApp().dependencies = ['SecurityService'];
 
-                sideLoadSecurityDescriptor(tenantService, securityDescriptor).then(() => {
-                    done();
-                  }).catch((err) => {
-                    done(err);
-                  });
-              }, 1800);
+            sideLoadSecurityDescriptor(tenantService, securityDescriptor).then(() => {
+              done();
+            }).catch((err) => {
+              done(err);
+            });
           }).catch((err) => {
             done(err);
           });
       });
 
-    it('Find Tenant By Id should Succeed', (done) => {
-        let service = {
-            endpoint: `http://localhost:${tenantService.getApp().listeningPort}`,
-            schemaRoute: '/swagger.json',
-            _id: uuid.v1(),
-          };
-
-        let apiBinding = new ApiBinding(service);
-
-        apiBinding.bind().then((service) => {
+    it('should find tenant by id', (done) => {
+        serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
             if (service) {
-              service.api.tenants.getTenant({ 'x-fast-pass': true, id: tenantEntry._id }, (tenant) => {
-                  if (tenant.obj) {
-                    done();
-                  }
-                }, (err) => {
-                  done(err);
-                });
+              let query = { 'x-fast-pass': true, id: tenantEntry._id };
+
+              // Get Tenant
+              service.api.tenants.getTenant(query, verifyGetTenantResponseOk(tenantEntry, done), verifyGetTenantErrorMissing(done));
             } else {
               done(new Error('Tenant Service Not Found'));
             }
           });
       });
 
-    it('Find Tenant By Id should Fail with 404', (done) => {
-        let service = {
-            endpoint: `http://localhost:${tenantService.getApp().listeningPort}`,
-            schemaRoute: '/swagger.json',
-            _id: uuid.v1(),
-          };
-
-        let apiBinding = new ApiBinding(service);
-
-        apiBinding.bind().then((service) => {
+    it('should Fail with 404 when finding tenant by unknown id', (done) => {
+        let unknownTenantId = '58a98bad624702214a6e2ba7';
+        serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
             if (service) {
-              service.api.tenants.getTenant({ 'x-fast-pass': true, id: '58a98bad624702214a6e2ba7' }, (tenant) => {
-                  done();
-                }, (err) => {
-                  if (err.status === 404) {
-                    done();
-                  } else {
-                    done(new Error(`Expected http status 404, received ${tenant.status}`));
-                  }
-                });
+              debugger;
+              let query = { 'x-fast-pass': true, id: unknownTenantId };
+              service.api.tenants.getTenant(query, verifyGetTenantResponseMissing(done), verifyTenantNotFoundErrorExists(done));
             } else {
               done(new Error('Missing Tenant Service'));
             }
           });
       });
 
-    it('Find Page of Tenants should Succeed', (done) => {
-        let service = {
-            endpoint: `http://localhost:${tenantService.getApp().listeningPort}`,
-            schemaRoute: '/swagger.json',
-            _id: uuid.v1(),
-          };
-
-        let apiBinding = new ApiBinding(service);
-
-        apiBinding.bind().then((service) => {
+    it('should find tenants', (done) => {
+        serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
             if (service) {
-              service.api.tenants.getTenants({ 'x-fast-pass': true }, (tenant) => {
-                  if (tenant.status === 200) {
-                    if (tenant.obj.page) {
-                      done();
-                    } else {
-                      done(new Error(`Expecting body with page field`));
-                    }
-                  } else
-                      done(new Error(`Expecting http status 200, received ${tenant.status}`));
-                }, (err) => {
-                  done(err);
-                });
+              let query = { 'x-fast-pass': true };
+              service.api.tenants.getTenants(query, verifyGetTenantsResponseOk(done), verifyGetTenantErrorMissing(done)
+              );
             } else {
               done(new Error('Missing Tenant Service'));
             }
