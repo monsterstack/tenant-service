@@ -27,11 +27,13 @@ const verifyUpdateTenantOk = (expected, done) => {
       assert.assertFieldExists('timestamp', response.obj, 'Expected tenant.timestamp exists');
 
       assert.assertEquals(response.obj.status, expected.status, `Expected ${response.obj.status} === ${expected.status}`);
+      assert.assertEquals(response.obj.services[0], expected.services[0], `Expected ${response.obj.services} === ${expected.services}`);
 
       // Make sure the secret has the Tenant Name
       let tokenTestHelper = new TokenTestHelper();
       let decoded = tokenTestHelper.decodeSecret(response.obj.apiKey, response.obj.apiSecret);
-      assert.assertEquals(response.obj.services.length, decoded.services.length, `Expected Service Count === ${decoded.services.length}`);
+      assert.assertEquals('Tenant', decoded.scope, `Expected ${decoded.scope} === Tenant`);
+      assert.assertEquals(response.obj.services[0], decoded.services[0], `Expected Service Count === ${decoded.services.length}`);
       assert.assertEquals(response.obj.apiKey, decoded.apiKey, `Expected ${response.obj.apiKey} === ${decoded.apiKey}`);
       done();
     } else {
@@ -80,7 +82,7 @@ describe('put-tenant-test', () => {
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let tenantEntryToUpdate = changeField(tenantEntry.id, newTenantEntry(), 'name', 'Foobar');
       tenantEntryToUpdate.apiKey = uuid.v1();
-      tenantEntryToUpdate.apiSecret = tokenTestHelper.codeSecret(tenantEntryToUpdate, tenantEntryToUpdate.apiKey);
+      tenantEntryToUpdate.apiSecret = tokenTestHelper.codeTenantSecret(tenantEntryToUpdate);
 
       let request = { 'x-fast-pass': true, tenant: tenantEntryToUpdate };
       service.api.tenants.updateTenant(request, verifyUpdateTenantOk(tenantEntryToUpdate, done), verifyUpdateTenantMissingError(done));
@@ -93,7 +95,7 @@ describe('put-tenant-test', () => {
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let tenantEntryToUpdate = changeField(tenantEntry.id, newTenantEntry(), 'status', 'Tired');
       tenantEntryToUpdate.apiKey = uuid.v1();
-      tenantEntryToUpdate.apiSecret = tokenTestHelper.codeSecret(tenantEntryToUpdate, tenantEntryToUpdate.apiKey);
+      tenantEntryToUpdate.apiSecret = tokenTestHelper.codeTenantSecret(tenantEntryToUpdate);
 
       let request = { 'x-fast-pass': true, tenant: tenantEntryToUpdate };
       service.api.tenants.updateTenant(request, verifyUpdateTenantOk(tenantEntryToUpdate, done), verifyUpdateTenantMissingError(done));
@@ -115,7 +117,6 @@ describe('put-tenant-test', () => {
       done(err);
     });
   });
-
 
   after((done) => {
     clearTenantDB((err) => {
