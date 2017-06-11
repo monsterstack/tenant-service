@@ -78,6 +78,16 @@ const verifyTenantNotFoundErrorExists = (done) => {
   };
 };
 
+const verifyBadRequest = (done) => {
+  return (err) => {
+    if (err.status === HttpStatus.BAD_REQUEST) {
+      done();
+    } else {
+      done(new Error(`Expected http status 400, received ${err.status}`));
+    }
+  };
+};
+
 describe('find-tenant', () => {
     let tenantService = null;
     let tenantUrl = 'mongodb://localhost:27017/cdspTenant';
@@ -96,18 +106,13 @@ describe('find-tenant', () => {
      */
     before((done) => {
         let mongoHelper = new MongoHelper('tenants', tenantUrl);
+        tenantEntry.apiKey = '223232323';
         mongoHelper.saveObject(tenantEntry).then((result) => {
           tenantEntry._id = result._id;
           return serviceTestHelper.startTestService('TenantService', {});
         }).then((service) => {
             tenantService = service;
-            tenantService.getApp().dependencies = ['SecurityService'];
-
-            sideLoadSecurityDescriptor(tenantService, securityDescriptor).then(() => {
-              done();
-            }).catch((err) => {
-              done(err);
-            });
+            done();
           }).catch((err) => {
             done(err);
           });
@@ -125,6 +130,29 @@ describe('find-tenant', () => {
             }
           });
       });
+
+    it('should find tenant by apiKey', (done) => {
+        serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
+            if (service) {
+              let query = { 'x-fast-pass': true, apiKey: tenantEntry.apiKey };
+
+              // Get Tenant
+              service.api.tenants.getTenantByApiKey(query, verifyGetTenantResponseOk(tenantEntry, done), verifyGetTenantErrorMissing(done));
+            } else {
+              done(new Error('Tenant Service Not Found'));
+            }
+          });
+      });
+
+    it('should return 400 - Bad Request when finding by malformed id', (done) => {
+      let malformedId = 'dfafe';
+      serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
+        let query = { 'x-fast-pass': true, id: malformedId };
+        service.api.tenants.getTenant(query, verifyGetTenantResponseMissing(done), verifyBadRequest(done));
+      }).catch((err) => {
+        done(err);
+      });
+    });
 
     it('should Fail with 404 when finding tenant by unknown id', (done) => {
         let unknownTenantId = '58a98bad624702214a6e2ba7';

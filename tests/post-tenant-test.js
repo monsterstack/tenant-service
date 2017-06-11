@@ -2,13 +2,16 @@
 const config = require('config');
 const ApiBinding = require('discovery-proxy').ApiBinding;
 const uuid = require('node-uuid');
+const HttpStatus = require('http-status');
 
 const startTestService = require('discovery-test-tools').startTestService;
 const sideLoadSecurityDescriptor = require('discovery-test-tools').sideLoadServiceDescriptor;
 const bindToGenericService = require('./utils').bindToGenericService;
 
+const TokenTestHelper = require('service-test-helpers').TokenTestHelper;
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
 const assert = require('service-test-helpers').Assert;
+
 const newTenantEntry = require('./utils').newTenantEntry;
 const newSecurityDescriptor = require('./utils').newSecurityDescriptor;
 
@@ -19,7 +22,25 @@ const jwt = require('jsonwebtoken');
 
 const verifySaveTenantCreated = (expected, done) => {
   return (response) => {
-    done();
+    if (response.obj && response.status == HttpStatus.CREATED) {
+      assert.assertFieldExists('id', response.obj, 'Expected tenant.id exists');
+      assert.assertFieldExists('name', response.obj, 'Expected tenant.name exists');
+      assert.assertFieldExists('status', response.obj, 'Expected tenant.status exists');
+      assert.assertFieldExists('apiKey', response.obj, 'Expected tenant.apiKey exists');
+      assert.assertFieldExists('apiSecret', response.obj, 'Expected tenant.apiSecret exists');
+      assert.assertFieldExists('services', response.obj, 'Expected tenant.services exists');
+
+      assert.assertEquals(response.obj.name, expected.name, `Expected ${response.obj.name} === ${expected.name}`);
+
+      // Make sure the secret has the Tenant Name
+      let tokenTestHelper = new TokenTestHelper();
+      let decoded = tokenTestHelper.decodeSecret(response.obj.apiKey, response.obj.apiSecret);
+      assert.assertEquals(response.obj.name, decoded.name, `Expected ${response.obj.name} === ${decoded.tenantName}`);
+      assert.assertEquals('Tenant', decoded.scope, `Expected Tenant === ${decoded.scope}`);
+      done();
+    } else {
+      done(new Error('Expected Http Status 201'));
+    }
   };
 };
 

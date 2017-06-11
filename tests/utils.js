@@ -3,6 +3,11 @@ const mongoose = require('mongoose');
 const uuid = require('node-uuid');
 const Promise = require('promise');
 
+const userData = require('./utils/userDataFactory');
+const accountData = require('./utils/accountDataFactory');
+const applicationData = require('./utils/applicationDataFactory');
+const tenantData = require('./utils/tenantDataFactory');
+
 const ApiBinding = require('discovery-proxy').ApiBinding;
 
 class MongoHelper {
@@ -27,41 +32,6 @@ class MongoHelper {
     return p;
   }
 }
-
-const newTenantEntry = (clientId, clientSecret) => {
-  return {
-        status: 'Active',
-        apiSecret: clientSecret,
-        timestamp: Date.now(),
-        name: 'Testerson',
-        apiKey: clientId,
-        services: [
-          {
-            name: 'DiscoveryService',
-            _id: mongoose.Types.ObjectId('58a98bad624702214a6e2ba9'),
-          },
-        ],
-      };
-};
-
-const newApplicationEntry = () => {
-  return {
-    name: 'MyApplication',
-    status: 'Live',
-    apiKey: '',
-    apiSecret: '',
-    tenantId: '11111',
-    accountId: '2232323',
-    scope: ['all'],
-  };
-};
-
-const newAccountEntry = () => {
-  return {
-    accountNumber: uuid.v1(),
-    tenantId: '1111',
-  };
-};
 
 const newSecurityDescriptor = (securityPort) => {
   return {
@@ -92,10 +62,40 @@ const bindToGenericService = (listeningPort) => {
   return apiBinding.bind();
 };
 
+const changeField = (id, obj, fieldName, newValue) => {
+  obj.id = id;
+  obj[fieldName] = newValue;
+  return obj;
+};
+
 module.exports.MongoHelper = MongoHelper;
-module.exports.newTenantEntry = newTenantEntry;
-module.exports.newAccountEntry = newAccountEntry;
-module.exports.newApplicationEntry = newApplicationEntry;
+module.exports.newTenantEntry = tenantData.newTenantEntry;
+
+module.exports.changeField = changeField;
+
+// -- User Data Stuff
+module.exports.newUserEntry = userData.newUserEntry;
+module.exports.newUserEntryMissingUsername = userData.newUserEntryMissingUsername;
+module.exports.newUserEntryMissingPassword = userData.newUserEntryMissingPassword;
+module.exports.newUserEntryMissingFirstname = userData.newUserEntryMissingFirstname;
+module.exports.newUserEntryMissingLastname = userData.newUserEntryMissingLastname;
+module.exports.newUserEntryMissingEmail = userData.newUserEntryMissingEmail;
+module.exports.newUserEntryMissingPhone = userData.newUserEntryMissingPhone;
+module.exports.newUserEntryMissingAccountId = userData.newUserEntryMissingAccountId;
+module.exports.newUserEntryMissingTenantId = userData.newUserEntryMissingTenantId;
+module.exports.newUserEntryInvalidEmail = userData.newUserEntryInvalidEmail;
+module.exports.newUserEntryInvalidPhone = userData.newUserEntryInvalidPhone;
+module.exports.newUserEntryInvalidFirstname = userData.newUserEntryInvalidFirstname;
+module.exports.newUserEntryInvalidLastname = userData.newUserEntryInvalidLastname;
+module.exports.changeUserField = userData.changeUserField;
+
+// -- Account Data Stuff
+module.exports.newAccountEntry = accountData.newAccountEntry;
+
+// -- Application Data Stuff
+module.exports.newApplicationEntry = applicationData.newApplicationEntry;
+
+// -- Misc Stuff
 module.exports.newSecurityDescriptor = newSecurityDescriptor;
 module.exports.newMinimalGenericServiceDescriptor = newMinimalGenericServiceDescriptor;
 

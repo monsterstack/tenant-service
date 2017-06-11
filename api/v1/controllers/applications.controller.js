@@ -8,6 +8,7 @@ const ServiceError = require('core-server').ServiceError;
 const Application = tenantModel.Application;
 
 const ApplicationService = require(appRoot + '/libs/services/applicationService');
+const Validator = require(appRoot + '/api/v1/validators/application.validator.js');
 
 /**
  * Build Page Descriptor
@@ -24,21 +25,64 @@ const saveApplication = (app) => {
     debugger;
     let application = req.body;
     let applicationService = new ApplicationService();
+    let validator = new Validator();
+
     let appName = application.name;
 
-    applicationService.findApplicationByName(appName).then((result) => {
-        if (result) {
-          res.status(HttpStatus.CONFLICT, 'An application with that name already exists');
-        } else {
-          applicationService.saveApplication(application).then((result) => {
-            res.status(HttpStatus.OK).send(result);
-          }).catch((err) => {
+    // Sanitize New Application
+    application = validator.sanitize(application, true);
+
+    validator.validateNewApplication(req, application.locale).then((result) => {
+      if (!result.isEmpty()) {
+        new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request', result.array()).writeResponse(res);
+      } else {
+        applicationService.findApplicationByName(appName).then((result) => {
+          if (result) {
+            res.status(HttpStatus.CONFLICT, 'An application with that name already exists');
+          } else {
+            applicationService.saveApplication(application).then((result) => {
+              res.status(HttpStatus.OK).send(result);
+            }).catch((err) => {
               new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
             });
-        }
-      }).catch((err) => {
-        new ServiceError(HttpStatus.OK, err.message).writeResponse(res);
-      });
+          }
+        }).catch((err) => {
+          new ServiceError(HttpStatus.OK, err.message).writeResponse(res);
+        });
+      }
+    });
+
+  };
+};
+
+const updateApplication = (app) => {
+  return (req, res) => {
+    let application = req.body;
+    let applicationService = new ApplicationService();
+    let validator = new Validator();
+    let applicationName = application.name;
+
+    application = validator.sanitize(application);
+
+    validator.validateApplication(req, application.locale).then((result) => {
+      if (!result.isEmpty()) {
+        new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request').writeResponse(res);
+      } else {
+        applicationService.findApplicationById(application.id).then((result) => {
+          if (result) {
+            applicationService.updateApplication(application).then((result) => {
+              res.status(HttpStatus.OK).send(result);
+            }).catch((err) => {
+              new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+            });
+          } else {
+            new ServiceError(HttpStatus.NOT_FOUND, 'Application not found').writeResponse(res);
+          }
+        }).catch((err) => {
+          new ServiceError(HttpStatus.OK, err.message).writeResponse(res);
+        });
+      }
+    });
   };
 };
 
@@ -71,18 +115,32 @@ const getApplication = (app) => {
   return (req, res) => {
     let application = req.body;
     let applicationService = new ApplicationService();
+    let validator = new Validator();
     let id = req.params.id;
 
-    applicationService.findApplicationById(id).then((result) => {
-      if (result) {
-        res.status(HttpStatus.OK).send(result);
+    validator.validateIdQuery(req).then((result) => {
+      if (!result.isEmpty()) {
+        throw new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request');
       } else {
-        new ServiceError(HttpStatus.NOT_FOUND, 'Application Not found').writeResponse(res);
+        return applicationService.findApplicationById(id);
+      }
+    }).then((found) => {
+      if (found) {
+        res.status(HttpStatus.OK).send(found);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Application not found');
+      }
+    }).catch((err) => {
+      if (err instanceof ServiceError) {
+        err.writeResponse(res);
+      } else {
+        new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
       }
     });
   };
 };
 
 exports.saveApplication = saveApplication;
+exports.updateApplication = updateApplication;
 exports.getApplication = getApplication;
 exports.findApplications = findApplications;

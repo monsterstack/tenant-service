@@ -14,6 +14,10 @@ class AccountService {
   saveAccount(account) {
     return model.saveAccount(account);
   }
+
+  updateAccount(account) {
+    return model.updateAccount(account);
+  }
 }
 
 module.exports.AccountService = AccountService;

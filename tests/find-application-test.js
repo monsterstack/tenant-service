@@ -70,11 +70,21 @@ const verifyGetApplicationNotFoundExists = (done) => {
   };
 };
 
+const verifyBadRequest = (done) => {
+  return (err) => {
+    if (err.status === HttpStatus.BAD_REQUEST) {
+      done();
+    } else {
+      done(new Error(`Expected http status 400, received ${err.status}`));
+    }
+  };
+};
+
 describe('find-application-test', () => {
   let tenantService;
   let securityDescriptor = newSecurityDescriptor(SECURITY_PORT);
 
-  let applicationEntry = newApplicationEntry();
+  let applicationEntry = newApplicationEntry('clientId', 'clientSecret');
   let serviceTestHelper = new ServiceTestHelper();
 
   before((done) => {
@@ -85,14 +95,7 @@ describe('find-application-test', () => {
       return serviceTestHelper.startTestService('TenantService', {});
     }).then((service) => {
         tenantService = service;
-        setTimeout(() => {
-            tenantService.getApp().dependencies = ['SecurityService'];
-            sideLoadSecurityDescriptor(tenantService, securityDescriptor).then(() => {
-              done();
-            }).catch((err) => {
-              done(err);
-            });
-          }, 1800);
+        done();
       }).catch((err) => {
         done(err);
       });
@@ -108,11 +111,20 @@ describe('find-application-test', () => {
     });
   });
 
-  it('should fail with 404 when finding application by unknown id', (done) => {
+  it('should fail with 404 - NOT FOUND when finding application by unknown id', (done) => {
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let unknownApplicationId = '58a98bad624702214a6e2ba7';
       let query = { 'x-fast-pass': true, id: unknownApplicationId };
       service.api.applications.getApplication(query, verifyGetApplicationResponseMissing(done), verifyGetApplicationNotFoundExists(done));
+    }).catch((err) => {
+      done(err);
+    });
+  });
+
+  it('shall return 400 - BAD REQUEST on find application with malformed id', (done) => {
+    serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
+      let query = { 'x-fast-pass': true, id: 'dfdfsdfdsf' };
+      service.api.applications.getApplication(query, verifyGetApplicationResponseMissing(done), verifyBadRequest(done));
     }).catch((err) => {
       done(err);
     });

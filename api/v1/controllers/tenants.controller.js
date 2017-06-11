@@ -8,6 +8,7 @@ const ServiceError = require('core-server').ServiceError;
 const Tenant = tenantModel.Tenant;
 
 const TenantService = require(appRoot + '/libs/services/tenantService');
+const Validator = require(appRoot + '/api/v1/validators/tenant.validator');
 
 /**
  * Build Page Descriptor
@@ -27,18 +28,23 @@ const getTenantByApiKey = (app) => {
   return (req, res) => {
     let apiKey = req.params.apiKey;
     let tenantService = new TenantService();
+    let validator = new Validator();
 
     // Try to find by apiKey
-    console.log(apiKey);
-    tenantService.findTenantByApiKey(apiKey).then((result) => {
-      if (result) {
-        res.status(HttpStatus.OK).send(result);
+    validator.validateApiKeyQuery(req).then((result) => {
+      if (!result.isEmpty()) {
+        throw new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request', result.array());
       } else {
-        let errorResponse = new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found');
-        errorResponse.writeResponse(res);
+        return tenantService.findTenantByApiKey(apiKey);
+      }
+    }).then((found) => {
+      if (found) {
+        res.status(HttpStatus.OK).send(found);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found');
       }
     }).catch((err) => {
-      if (err instanceof Error) {
+      if (err instanceof ServiceError) {
         err.writeResponse(res);
       } else {
         new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
@@ -51,18 +57,27 @@ const getTenant = (app) => {
   return (req, res) => {
     let id = req.params.id;
 
-    // validate id requirements.  If invalid return BAD_REQUEST
     let tenantService = new TenantService();
-    tenantService.findTenantById(id).then((result) => {
-      if (result) {
-        res.status(HttpStatus.OK).send(result);
+    let validator = new Validator();
+
+    validator.validateIdQuery(req).then((result) => {
+      if (!result.isEmpty()) {
+        throw new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request', result.array());
       } else {
-        new ServiceError(HttpStatus.NOT_FOUND, 'Not found').writeResponse(res);
+        return tenantService.findTenantById(id);
+      }
+    }).then((found) => {
+      if (found) {
+        res.status(HttpStatus.OK).send(found);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found');
       }
     }).catch((err) => {
-      let errResponse = new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message);
-      console.log(errResponse.toJSON());
-      errResponse.writeResponse(res);
+      if (err instanceof ServiceError) {
+        err.writeResponse(res);
+      } else {
+        new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+      }
     });
   };
 };
@@ -95,24 +110,33 @@ const findTenants = (app) => {
 const saveTenant = (app) => {
   return (req, res) => {
     let tenant = req.body;
-    console.log(tenant);
-    console.log(tenant.name);
     let tenantService = new TenantService();
+    let validator = new Validator();
+
+    tenant = validator.sanitize(tenant, true);
     let tenantName = tenant.name;
 
-    tenantService.findTenantByName(tenantName).then((result) => {
-        if (result) {
-          res.status(HttpStatus.CONFLICT, 'A tenant with that name already exists');
-        } else {
-          tenantService.saveTenant(tenant).then((result) => {
-            res.status(HttpStatus.OK).send(result);
-          }).catch((err) => {
-              new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
-            });
-        }
-      }).catch((err) => {
-        new ServiceError(HttpStatus.OK, err.message).writeResponse(res);
-      });
+    validator.validateNewTenant(req).then((result) => {
+      if (!result.isEmpty()) {
+        throw new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request', result.array());
+      } else {
+        return tenantService.findTenantByName(tenantName);
+      }
+    }).then((found) => {
+      if (found) {
+        throw new ServiceError(HttpStatus.CONFLICT, `Tenant already exists with that name ${tenantName}`);
+      } else {
+        return tenantService.saveTenant(tenant);
+      }
+    }).then((saved) => {
+      res.status(HttpStatus.CREATED).send(saved);
+    }).catch((err) => {
+      if (err instanceof ServiceError) {
+        err.writeResponse(res);
+      } else {
+        new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+      }
+    });
   };
 };
 
@@ -120,21 +144,29 @@ const updateTenant = (app) => {
   return (req, res) => {
     let tenant = req.body;
     let tenantService = new TenantService();
+    let validator = new Validator();
     let tenantName = tenant.name;
 
-    tenantService.findTenantById(tenant.id).then((result) => {
-        if (result) {
-          tenantService.updateTenant(tenant).then((result) => {
-            console.log(result);
-            res.status(HttpStatus.OK).send(result);
-          }).catch((err) => {
-              new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
-            });
-        } else {
-          new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found').writeResponse(res);
-        }
-      }).catch((err) => {
-      new ServiceError(HttpStatus.OK, err.message).writeResponse(res);
+    validator.validateTenant(req).then((result) => {
+      if (!result.isEmpty()) {
+        throw new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request', result.array());
+      } else {
+        return tenantService.findTenantById(tenant.id);
+      }
+    }).then((found) => {
+      if (found) {
+        found = tenantModel.merge(found, tenant, ['status', 'services']);
+        return tenantService.updateTenant(found);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found');
+      }
+    }).then((updatedTenant) => {
+      res.status(HttpStatus.OK).send(updatedTenant);
+    }).catch((err) => {
+      if (err instanceof ServiceError)
+        err.writeResponse(res);
+      else
+        new ServiceError(HttpStatus.OK, err.message).writeResponse(res);
     });
   };
 };

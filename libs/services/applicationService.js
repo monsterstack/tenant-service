@@ -26,6 +26,10 @@ class ApplicationService {
   saveApplication(application) {
     return model.saveApplication(application);
   }
+
+  updateApplication(application) {
+    return model.updateApplication(application);
+  }
 }
 
 module.exports = ApplicationService;

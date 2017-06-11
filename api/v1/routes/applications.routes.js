@@ -29,7 +29,7 @@ module.exports = (app) => {
    	*        in: header
    	*        require: false
    	*    responses:
-   	*      200:
+   	*      201:
    	*        description: Application
    	*        type: object
    	*        schema:
@@ -41,6 +41,46 @@ module.exports = (app) => {
    	*          $ref: '#/definitions/Error'
    	*/
   app.post('/api/v1/apps', controller.saveApplication(app));
+
+  /**
+   	* @swagger
+   	* /apps:
+   	*  put:
+   	*    summary: Update Application
+   	*    description: Update Application
+   	*    operationId: updateApplication
+   	*    tags:
+   	*      - applications
+   	*    produces:
+   	*      - application/json
+   	*    consumes:
+   	*      - application/json
+   	*    parameters:
+   	*      - name: application
+   	*        description: application
+   	*        type: object
+   	*        schema:
+   	*          $ref: '#/definitions/Application'
+   	*        in: body
+   	*        required: true
+   	*      - name: x-fast-pass
+   	*        description: Bypass Auth
+   	*        type: boolean
+   	*        in: header
+   	*        require: false
+   	*    responses:
+   	*      200:
+   	*        description: Application
+   	*        type: object
+   	*        schema:
+   	*          $ref: '#/definitions/Application'
+   	*      400:
+   	*        description: Bad request
+   	*        type: object
+   	*        schema:
+   	*          $ref: '#/definitions/Error'
+   	*/
+  app.put('/api/v1/apps', controller.updateApplication(app));
 
   /**
    * @swagger

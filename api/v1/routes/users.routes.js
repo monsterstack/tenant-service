@@ -1,26 +1,26 @@
 'use strict';
-const controller = require('../controllers/accounts.controller.js');
+const controller = require('../controllers/users.controller.js');
 
 module.exports = (app) => {
   /**
     * @swagger
-    * /accounts:
+    * /users:
     *  post:
-    *    summary: Save Account
-    *    description: Save Account
-    *    operationId: saveAccount
+    *    summary: Save User
+    *    description: Save User
+    *    operationId: saveUser
     *    tags:
-    *      - accounts
+    *      - users
     *    produces:
     *      - application/json
     *    consumes:
     *      - application/json
     *    parameters:
-    *      - name: account
-    *        description: account
+    *      - name: user
+    *        description: user
     *        type: object
     *        schema:
-    *          $ref: '#/definitions/Account'
+    *          $ref: '#/definitions/User'
     *        in: body
     *        required: true
     *      - name: x-fast-pass
@@ -30,38 +30,37 @@ module.exports = (app) => {
     *        require: false
     *    responses:
     *      201:
-    *        description: Account
+    *        description: User
     *        type: object
     *        schema:
-    *          $ref: '#/definitions/Account'
+    *          $ref: '#/definitions/User'
     *      400:
     *        description: Bad request
     *        type: object
     *        schema:
     *          $ref: '#/definitions/Error'
     */
-  app.post('/api/v1/accounts', app.realizationCheck.dependenciesAreRealized(),
-          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.saveAccount(app));
+  app.post('/api/v1/users', controller.saveUser(app));
 
   /**
     * @swagger
-    * /accounts:
+    * /users:
     *  put:
-    *    summary: Update Account
-    *    description: Update Account
-    *    operationId: updateAccount
+    *    summary: Update User
+    *    description: Update User
+    *    operationId: updateUser
     *    tags:
-    *      - accounts
+    *      - users
     *    produces:
     *      - application/json
     *    consumes:
     *      - application/json
     *    parameters:
-    *      - name: account
-    *        description: account
+    *      - name: user
+    *        description: user
     *        type: object
     *        schema:
-    *          $ref: '#/definitions/Account'
+    *          $ref: '#/definitions/User'
     *        in: body
     *        required: true
     *      - name: x-fast-pass
@@ -71,35 +70,34 @@ module.exports = (app) => {
     *        require: false
     *    responses:
     *      200:
-    *        description: Account
+    *        description: User
     *        type: object
     *        schema:
-    *          $ref: '#/definitions/Account'
+    *          $ref: '#/definitions/User'
     *      400:
     *        description: Bad request
     *        type: object
     *        schema:
     *          $ref: '#/definitions/Error'
     */
-  app.put('/api/v1/accounts', app.realizationCheck.dependenciesAreRealized(),
-          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.updateAccount(app));
+  app.put('/api/v1/users', controller.updateUser(app));
 
   /**
    * @swagger
-   * /accounts/{id}:
+   * /users/{id}:
    *  get:
-   *    summary: Get Account By Id
-   *    description: Get Account By Id
-   *    operationId: getAccount
+   *    summary: Get User By Id
+   *    description: Get User By Id
+   *    operationId: getUser
    *    tags:
-   *      - accounts
+   *      - users
    *    produces:
    *      - application/json
    *    consumes:
    *      - application/json
    *    parameters:
    *      - name: id
-   *        description: Id of Account
+   *        description: Id of User
    *        type: string
    *        in: path
    *        required: true
@@ -110,16 +108,15 @@ module.exports = (app) => {
    *        require: false
    *    responses:
    *      200:
-   *        description: Account
+   *        description: User
    *        type: object
    *        schema:
-   *          $ref: '#/definitions/Account'
+   *          $ref: '#/definitions/User'
    *      404:
    *        description: Not found
    *        type: object
    *        schema:
    *          $ref: '#/definitions/Error'
    */
-  app.get('/api/v1/accounts/:id', app.realizationCheck.dependenciesAreRealized(),
-          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getAccount(app));
+  app.get('/api/v1/users/:id', controller.getUser(app));
 };

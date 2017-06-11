@@ -6,6 +6,50 @@
   },
   "swagger": "2.0",
   "paths": {
+    "Application": {
+      "type": "object",
+      "required": [
+        "name",
+        "timestamp",
+        "status",
+        "apiKey",
+        "apiSecret",
+        "scope"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "apiSecret": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timestamp": {
+          "type": "number",
+          "format": "date"
+        }
+      }
+    },
     "/accounts": {
       "post": {
         "summary": "Save Account",
@@ -41,6 +85,55 @@
         ],
         "responses": {
           "201": {
+            "description": "Account",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Account"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Account",
+        "description": "Update Account",
+        "operationId": "updateAccount",
+        "tags": [
+          "accounts"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "account",
+            "description": "account",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Account"
+            },
+            "in": "body",
+            "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
+          }
+        ],
+        "responses": {
+          "200": {
             "description": "Account",
             "type": "object",
             "schema": {
@@ -110,6 +203,55 @@
         "summary": "Save Application",
         "description": "Save Application",
         "operationId": "saveApplication",
+        "tags": [
+          "applications"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "application",
+            "description": "application",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Application"
+            },
+            "in": "body",
+            "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Application",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Application"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Application",
+        "description": "Update Application",
+        "operationId": "updateApplication",
         "tags": [
           "applications"
         ],
@@ -529,6 +671,154 @@
           }
         }
       }
+    },
+    "/users": {
+      "post": {
+        "summary": "Save User",
+        "description": "Save User",
+        "operationId": "saveUser",
+        "tags": [
+          "users"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "description": "user",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "in": "body",
+            "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update User",
+        "description": "Update User",
+        "operationId": "updateUser",
+        "tags": [
+          "users"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "description": "user",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "in": "body",
+            "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Get User By Id",
+        "description": "Get User By Id",
+        "operationId": "getUser",
+        "tags": [
+          "users"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Id of User",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -539,6 +829,27 @@
       ],
       "properties": {
         "errorMessage": {
+          "type": "string"
+        },
+        "violations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ConstraintViolation"
+          }
+        }
+      }
+    },
+    "ConstraintViolation": {
+      "type": "object",
+      "required": [
+        "param",
+        "message"
+      ],
+      "properties": {
+        "param": {
+          "type": "string"
+        },
+        "message": {
           "type": "string"
         }
       }
@@ -647,47 +958,66 @@
         }
       }
     },
-    "Application": {
+    "User": {
       "type": "object",
       "required": [
-        "name",
-        "timestamp",
-        "status",
-        "apiKey",
-        "apiSecret",
-        "scope"
+        "firstname",
+        "lastname",
+        "email",
+        "phoneNumber",
+        "username",
+        "password",
+        "accountId",
+        "tenantId"
       ],
       "properties": {
         "id": {
           "type": "string"
         },
-        "name": {
+        "locale": {
           "type": "string"
         },
-        "status": {
+        "firstname": {
           "type": "string"
         },
-        "apiKey": {
+        "lastname": {
           "type": "string"
         },
-        "tenantId": {
+        "phoneNumber": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
           "type": "string"
         },
         "accountId": {
           "type": "string"
         },
-        "apiSecret": {
+        "tenantId": {
+          "type": "string"
+        }
+      }
+    },
+    "Account": {
+      "type": "object",
+      "required": [
+        "accountNumber",
+        "tenantId"
+      ],
+      "properties": {
+        "id": {
           "type": "string"
         },
-        "scope": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "accountNumber": {
+          "type": "string"
         },
-        "timestamp": {
-          "type": "number",
-          "format": "date"
+        "tenantId": {
+          "type": "string"
         }
       }
     }

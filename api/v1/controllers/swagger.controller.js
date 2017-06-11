@@ -10,7 +10,6 @@ const getSwagger = (app) => {
     let baseSwagger = require(appRoot + '/api/swagger/swagger.json');
     let options = {};
 
-    console.log(`App listening port is ${app.listeningPort}`);
     if (!process.env.hasOwnProperty('randomWorkerPort') || process.env.randomWorkerPort === false) {
       options.port = app.listeningPort;
     }

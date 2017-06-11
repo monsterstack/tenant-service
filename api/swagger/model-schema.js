@@ -25,6 +25,20 @@
  *     properties:
  *        errorMessage:
  *          type: string
+ *        violations:
+ *          type: array
+ *          items:
+ *             $ref: "#/definitions/ConstraintViolation"
+ *   ConstraintViolation:
+ *     type: object
+ *     required:
+ *       - param
+ *       - message
+ *     properties:
+ *       param:
+ *         type: string
+ *       message:
+ *         type: string
  *   Health:
  *     type: object
  *     required:
@@ -97,7 +111,51 @@
  *        timestamp:
  *          type: number
  *          format: date
- *   Application:
+ *   User:
+ *     type: object
+ *     required:
+ *       - firstname
+ *       - lastname
+ *       - email
+ *       - phoneNumber
+ *       - username
+ *       - password
+ *       - accountId
+ *       - tenantId
+ *     properties:
+ *       id:
+ *         type: string
+ *       locale:
+ *         type: string
+ *       firstname:
+ *         type: string
+ *       lastname:
+ *         type: string
+ *       phoneNumber:
+ *         type: string
+ *       email:
+ *         type: string
+ *       username:
+ *         type: string
+ *       password:
+ *         type: string
+ *       accountId:
+ *         type: string
+ *       tenantId:
+ *         type: string
+ *   Account:
+ *     type: object
+ *     required:
+ *       - accountNumber
+ *       - tenantId
+ *     properties:
+ *       id:
+ *         type: string
+ *       accountNumber:
+ *         type: string
+ *       tenantId:
+ *         type: string
+ * 	 Application:
  *     type: object
  *     required:
  *       - name
