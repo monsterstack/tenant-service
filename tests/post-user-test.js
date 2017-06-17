@@ -2,18 +2,18 @@
 const config = require('config');
 const HttpStatus = require('http-status');
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
-const MongoHelper = require('./utils').MongoHelper;
+const MongoHelper = require('data-test-helpers').MongoHelper;
 
-const newUserEntry = require('./utils').newUserEntry;
-const newUserEntryMissingUsername = require('./utils').newUserEntryMissingUsername;
-const newUserEntryMissingPassword = require('./utils').newUserEntryMissingPassword;
-const newUserEntryMissingFirstname = require('./utils').newUserEntryMissingFirstname;
-const newUserEntryMissingLastname = require('./utils').newUserEntryMissingLastname;
-const newUserEntryMissingEmail = require('./utils').newUserEntryMissingEmail;
-const newUserEntryMissingPhone = require('./utils').newUserEntryMissingPhone;
+const newUserEntry = require('data-test-helpers').newUserEntry;
+const newUserEntryMissingUsername = require('data-test-helpers').newUserEntryMissingUsername;
+const newUserEntryMissingPassword = require('data-test-helpers').newUserEntryMissingPassword;
+const newUserEntryMissingFirstname = require('data-test-helpers').newUserEntryMissingFirstname;
+const newUserEntryMissingLastname = require('data-test-helpers').newUserEntryMissingLastname;
+const newUserEntryMissingEmail = require('data-test-helpers').newUserEntryMissingEmail;
+const newUserEntryMissingPhone = require('data-test-helpers').newUserEntryMissingPhone;
 
-const newTenantEntry = require('./utils').newTenantEntry;
-const newAccountEntry = require('./utils').newAccountEntry;
+const newTenantEntry = require('data-test-helpers').newTenantEntry;
+const newAccountEntry = require('data-test-helpers').newAccountEntry;
 
 const assert = require('service-test-helpers').Assert;
 

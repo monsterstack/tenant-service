@@ -3,9 +3,9 @@ const config = require('config');
 const HttpStatus = require('http-status');
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
 const assert = require('service-test-helpers').Assert;
-const MongoHelper = require('./utils').MongoHelper;
+const MongoHelper = require('data-test-helpers').MongoHelper;
 
-const newUserEntry = require('./utils').newUserEntry;
+const newUserEntry = require('data-test-helpers').newUserEntry;
 
 let tenantDbUrl = config.test.tenantDbUrl;
 

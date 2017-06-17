@@ -5,11 +5,11 @@ const TokenTestHelper = require('service-test-helpers').TokenTestHelper;
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
 const assert = require('service-test-helpers').Assert;
 
-const newTenantEntry = require('./utils').newTenantEntry;
-const MongoHelper = require('./utils').MongoHelper;
+const newTenantEntry = require('data-test-helpers').newTenantEntry;
+const MongoHelper = require('data-test-helpers').MongoHelper;
 
 const uuid = require('node-uuid');
-const changeField = require('./utils').changeField;
+const changeField = require('data-test-helpers').changeField;
 
 /**
  * Verify Update Tenant is 'Ok'

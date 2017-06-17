@@ -3,9 +3,9 @@ const HttpStatus = require('http-status');
 const config = require('config');
 
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
-const MongoHelper = require('./utils').MongoHelper;
-const newAccountEntry = require('./utils').newAccountEntry;
-const newTenantEntry = require('./utils').newTenantEntry;
+const MongoHelper = require('data-test-helpers').MongoHelper;
+const newAccountEntry = require('data-test-helpers').newAccountEntry;
+const newTenantEntry = require('data-test-helpers').newTenantEntry;
 const assert = require('service-test-helpers').Assert;
 
 const verifyUpdateAccountOk = (expected, done) => {

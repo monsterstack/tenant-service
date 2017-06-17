@@ -3,13 +3,13 @@ const ApiBinding = require('discovery-proxy').ApiBinding;
 const assert = require('assert');
 
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
-const MongoHelper = require('./utils').MongoHelper;
+const MongoHelper = require('data-test-helpers').MongoHelper;
 
-const newApplicationEntry = require('./utils').newApplicationEntry;
-const newAccountEntry = require('./utils').newAccountEntry;
-const newTenantEntry = require('./utils').newTenantEntry;
+const newApplicationEntry = require('data-test-helpers').newApplicationEntry;
+const newAccountEntry = require('data-test-helpers').newAccountEntry;
+const newTenantEntry = require('data-test-helpers').newTenantEntry;
 
-const newSecurityDescriptor = require('./utils').newSecurityDescriptor;
+const newSecurityDescriptor = require('data-test-helpers').newSecurityDescriptor;
 const sideLoadSecurityDescriptor = require('discovery-test-tools').sideLoadServiceDescriptor;
 
 const SECURITY_PORT = 12616;

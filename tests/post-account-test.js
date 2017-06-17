@@ -1,10 +1,10 @@
 'use strict';
 
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
-const MongoHelper = require('./utils').MongoHelper;
-const newSecurityDescriptor = require('./utils').newSecurityDescriptor;
-const newAccountEntry = require('./utils').newAccountEntry;
-const newTenantEntry = require('./utils').newTenantEntry;
+const MongoHelper = require('data-test-helpers').MongoHelper;
+const newSecurityDescriptor = require('data-test-helpers').newSecurityDescriptor;
+const newAccountEntry = require('data-test-helpers').newAccountEntry;
+const newTenantEntry = require('data-test-helpers').newTenantEntry;
 
 const sideLoadSecurityDescriptor = require('discovery-test-tools').sideLoadServiceDescriptor;
 

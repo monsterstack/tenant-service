@@ -5,11 +5,11 @@ const TokenTestHelper = require('service-test-helpers').TokenTestHelper;
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
 const assert = require('service-test-helpers').Assert;
 
-const newApplicationEntry = require('./utils').newApplicationEntry;
-const newTenantEntry = require('./utils').newTenantEntry;
-const newAccountEntry = require('./utils').newAccountEntry;
+const newApplicationEntry = require('data-test-helpers').newApplicationEntry;
+const newTenantEntry = require('data-test-helpers').newTenantEntry;
+const newAccountEntry = require('data-test-helpers').newAccountEntry;
 
-const MongoHelper = require('./utils').MongoHelper;
+const MongoHelper = require('data-test-helpers').MongoHelper;
 
 const verifyUpdateApplicationOk = (done) => {
   return (response) => {

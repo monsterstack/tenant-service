@@ -2,12 +2,12 @@
 const uuid = require('node-uuid');
 const HttpStatus = require('http-status');
 const ApiBinding = require('discovery-proxy').ApiBinding;
-const MongoHelper = require('./utils').MongoHelper;
+const MongoHelper = require('data-test-helpers').MongoHelper;
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
 const assert = require('service-test-helpers').Assert;
 
-const newApplicationEntry = require('./utils').newApplicationEntry;
-const newSecurityDescriptor = require('./utils').newSecurityDescriptor;
+const newApplicationEntry = require('data-test-helpers').newApplicationEntry;
+const newSecurityDescriptor = require('data-test-helpers').newSecurityDescriptor;
 const sideLoadSecurityDescriptor = require('discovery-test-tools').sideLoadServiceDescriptor;
 
 const SECURITY_PORT = 12616;

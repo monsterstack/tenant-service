@@ -6,14 +6,14 @@ const HttpStatus = require('http-status');
 
 const startTestService = require('discovery-test-tools').startTestService;
 const sideLoadSecurityDescriptor = require('discovery-test-tools').sideLoadServiceDescriptor;
-const bindToGenericService = require('./utils').bindToGenericService;
+const bindToGenericService = require('data-test-helpers').bindToGenericService;
 
 const TokenTestHelper = require('service-test-helpers').TokenTestHelper;
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
 const assert = require('service-test-helpers').Assert;
 
-const newTenantEntry = require('./utils').newTenantEntry;
-const newSecurityDescriptor = require('./utils').newSecurityDescriptor;
+const newTenantEntry = require('data-test-helpers').newTenantEntry;
+const newSecurityDescriptor = require('data-test-helpers').newSecurityDescriptor;
 
 const SECURITY_PORT = 12616;
 

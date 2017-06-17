@@ -1,11 +1,11 @@
 'use strict';
 const config = require('config');
 const HttpStatus = require('http-status');
-const MongoHelper = require('./utils').MongoHelper;
+const MongoHelper = require('data-test-helpers').MongoHelper;
 const SECURITY_PORT = 12616;
 
-const newAccountEntry = require('./utils').newAccountEntry;
-const newSecurityDescriptor = require('./utils').newSecurityDescriptor;
+const newAccountEntry = require('data-test-helpers').newAccountEntry;
+const newSecurityDescriptor = require('data-test-helpers').newSecurityDescriptor;
 
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
 const assert = require('service-test-helpers').Assert;

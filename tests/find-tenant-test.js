@@ -2,9 +2,9 @@
 
 const HttpStatus = require('http-status');
 const ApiBinding = require('discovery-proxy').ApiBinding;
-const MongoHelper = require('./utils').MongoHelper;
-const newTenantEntry = require('./utils').newTenantEntry;
-const newSecurityDescriptor = require('./utils').newSecurityDescriptor;
+const MongoHelper = require('data-test-helpers').MongoHelper;
+const newTenantEntry = require('data-test-helpers').newTenantEntry;
+const newSecurityDescriptor = require('data-test-helpers').newSecurityDescriptor;
 
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
 const assert = require('service-test-helpers').Assert;

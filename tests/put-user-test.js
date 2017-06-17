@@ -5,24 +5,24 @@ const md5 = require('md5');
 
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
 const assert = require('service-test-helpers').Assert;
-const MongoHelper = require('./utils').MongoHelper;
+const MongoHelper = require('data-test-helpers').MongoHelper;
 
-const newUserEntry = require('./utils').newUserEntry;
-const newUserEntryMissingUsername = require('./utils').newUserEntryMissingUsername;
-const newUserEntryMissingFirstname = require('./utils').newUserEntryMissingFirstname;
-const newUserEntryMissingLastname = require('./utils').newUserEntryMissingLastname;
-const newUserEntryMissingPhoneNumber = require('./utils').newUserEntryMissingPhone;
-const newUserEntryMissingEmail = require('./utils').newUserEntryMissingEmail;
-const newUserEntryMissingAccountId = require('./utils').newUserEntryMissingAccountId;
-const newUserEntryMissingTenantId = require('./utils').newUserEntryMissingTenantId;
-const newUserEntryInvalidEmail = require('./utils').newUserEntryInvalidEmail;
-const newUserEntryInvalidPhoneNumber = require('./utils').newUserEntryInvalidPhone;
-const newUserEntryInvalidFirstname = require('./utils').newUserEntryInvalidFirstname;
-const newUserEntryInvalidLastname = require('./utils').newUserEntryInvalidLastname;
-const changeUserField = require('./utils').changeUserField;
+const newUserEntry = require('data-test-helpers').newUserEntry;
+const newUserEntryMissingUsername = require('data-test-helpers').newUserEntryMissingUsername;
+const newUserEntryMissingFirstname = require('data-test-helpers').newUserEntryMissingFirstname;
+const newUserEntryMissingLastname = require('data-test-helpers').newUserEntryMissingLastname;
+const newUserEntryMissingPhoneNumber = require('data-test-helpers').newUserEntryMissingPhone;
+const newUserEntryMissingEmail = require('data-test-helpers').newUserEntryMissingEmail;
+const newUserEntryMissingAccountId = require('data-test-helpers').newUserEntryMissingAccountId;
+const newUserEntryMissingTenantId = require('data-test-helpers').newUserEntryMissingTenantId;
+const newUserEntryInvalidEmail = require('data-test-helpers').newUserEntryInvalidEmail;
+const newUserEntryInvalidPhoneNumber = require('data-test-helpers').newUserEntryInvalidPhone;
+const newUserEntryInvalidFirstname = require('data-test-helpers').newUserEntryInvalidFirstname;
+const newUserEntryInvalidLastname = require('data-test-helpers').newUserEntryInvalidLastname;
+const changeUserField = require('data-test-helpers').changeUserField;
 
-const newTenantEntry = require('./utils').newTenantEntry;
-const newAccountEntry = require('./utils').newAccountEntry;
+const newTenantEntry = require('data-test-helpers').newTenantEntry;
+const newAccountEntry = require('data-test-helpers').newAccountEntry;
 
 const verifyUpdateUserOk = (expected, done) => {
   return (response) => {
