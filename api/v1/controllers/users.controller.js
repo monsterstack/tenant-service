@@ -8,6 +8,8 @@ const tenantModel = require('tenant-model').model;
 const ServiceError = require('core-server').ServiceError;
 
 const UserService = require(appRoot + '/libs/services/userService').UserService;
+const TenantService = require(appRoot + '/libs/services/tenantService').TenantService;
+const AccountService = require(appRoot + '/libs/services/accountService').AccountService;
 const Validator = require(appRoot + '/api/v1/validators/user.validator.js');
 
 const getUser = (app) => {
@@ -43,6 +45,8 @@ const saveUser = (app) => {
     let user = req.body;
     let validator = new Validator();
     let userService = new UserService();
+    let tenantService = new TenantService();
+    let accountService = new AccountService();
 
     user = validator.sanitize(user, true);
 
@@ -50,7 +54,19 @@ const saveUser = (app) => {
       if (!result.isEmpty()) {
         throw new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request', result.array());
       } else {
+        return tenantService.findTenantById(user.tenantId);
+      }
+    }).then((tenant) => {
+      if (tenant) {
+        return accountService.findAccountById(user.accountId);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found, unable to associate with user');
+      }
+    }).then((account) => {
+      if (account) {
         return userService.findUserByUsername(user.username);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Account not found, unable to associate with user');
       }
     }).then((foundUser) => {
       if (foundUser) {
@@ -74,14 +90,28 @@ const updateUser = (app) => {
     let user = req.body;
     let validator = new Validator();
     let userService = new UserService();
+    let tenantService = new TenantService();
+    let accountService = new AccountService();
 
     user = validator.sanitize(user, false);
 
-    validator.validateUser(req, user.local).then((result) => {
+    validator.validateUser(req, user.locale).then((result) => {
       if (!result.isEmpty()) {
         throw new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request', result.array());
       } else {
+        return tenantService.findTenantById(user.tenantId);
+      }
+    }).then((tenant) => {
+      if (tenant) {
+        return accountService.findAccountById(user.accountId);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found, unable to associate with user');
+      }
+    }).then((account) => {
+      if (account) {
         return userService.findUserById(user.id);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Account not found, unable to associate with user');
       }
     }).then((userToUpdate) => {
       if (userToUpdate) {

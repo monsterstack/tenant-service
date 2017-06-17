@@ -7,7 +7,7 @@ const tenantModel = require('tenant-model').model;
 const ServiceError = require('core-server').ServiceError;
 const Tenant = tenantModel.Tenant;
 
-const TenantService = require(appRoot + '/libs/services/tenantService');
+const TenantService = require(appRoot + '/libs/services/tenantService').TenantService;
 const Validator = require(appRoot + '/api/v1/validators/tenant.validator');
 
 /**

@@ -32,4 +32,4 @@ class ApplicationService {
   }
 }
 
-module.exports = ApplicationService;
+module.exports.ApplicationService = ApplicationService;

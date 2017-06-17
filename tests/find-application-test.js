@@ -101,6 +101,16 @@ describe('find-application-test', () => {
       });
   });
 
+  it('should find one application by apiKey', (done) => {
+    serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
+      let query = { 'x-fast-pass': true, apiKey: applicationEntry.apiKey };
+      service.api.applications.getApplicationByApiKey(
+        query, verifyGetApplicationResponseOk(applicationEntry, done), verifyGetApplicationErrorMissing(done));
+    }).catch((err) => {
+      done(err);
+    });
+  });
+
   it('should find one application by id', (done) => {
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let query = { 'x-fast-pass': true, id: applicationEntry._id };

@@ -399,6 +399,54 @@
         }
       }
     },
+    "/apps/_apiKey/{apiKey}": {
+      "get": {
+        "summary": "Get Application By Api Key",
+        "description": "Get Application By Api Key",
+        "operationId": "getApplicationByApiKey",
+        "tags": [
+          "applications"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "description": "Api Key of Application",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "x-fast-pass",
+            "description": "Bypass Auth",
+            "type": "boolean",
+            "in": "header",
+            "require": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Application"
+            }
+          },
+          "404": {
+            "description": "Error",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "description": "Get Health of Service",

@@ -40,7 +40,8 @@ module.exports = (app) => {
    	*        schema:
    	*          $ref: '#/definitions/Error'
    	*/
-  app.post('/api/v1/apps', controller.saveApplication(app));
+  app.post('/api/v1/apps', app.realizationCheck.dependenciesAreRealized(),
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.saveApplication(app));
 
   /**
    	* @swagger
@@ -80,7 +81,8 @@ module.exports = (app) => {
    	*        schema:
    	*          $ref: '#/definitions/Error'
    	*/
-  app.put('/api/v1/apps', controller.updateApplication(app));
+  app.put('/api/v1/apps', app.realizationCheck.dependenciesAreRealized(),
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.updateApplication(app));
 
   /**
    * @swagger
@@ -118,7 +120,47 @@ module.exports = (app) => {
    *        schema:
    *          $ref: '#/definitions/Error'
    */
-  app.get('/api/v1/apps/:id', controller.getApplication(app));
+  app.get('/api/v1/apps/:id', app.realizationCheck.dependenciesAreRealized(),
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getApplication(app));
+
+  /**
+   * @swagger
+   * /apps/_apiKey/{apiKey}:
+   *  get:
+   *    summary: Get Application By Api Key
+   *    description: Get Application By Api Key
+   *    operationId: getApplicationByApiKey
+   *    tags:
+   *      - applications
+   *    produces:
+   *      - application/json
+   *    consumes:
+   *      - application/json
+   *    parameters:
+   *      - name: apiKey
+   *        description: Api Key of Application
+   *        type: string
+   *        in: path
+   *        required: true
+   *      - name: x-fast-pass
+   *        description: Bypass Auth
+   *        type: boolean
+   *        in: header
+   *        require: false
+   *    responses:
+   *      200:
+   *        description: Application
+   *        type: object
+   *        schema:
+   *          $ref: '#/definitions/Application'
+   *      404:
+   *        description: Error
+   *        type: object
+   *        schema:
+   *          $ref: '#/definitions/Error'
+   */
+  app.get('/api/v1/apps/_apiKey/:apiKey', app.realizationCheck.dependenciesAreRealized(),
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getApplicationByApiKey(app));
 
   /**
    * @swagger
@@ -161,5 +203,6 @@ module.exports = (app) => {
    *        schema:
    *          $ref: '#/definitions/Application'
    */
-  app.get('/api/v1/apps', controller.findApplications(app));
+  app.get('/api/v1/apps', app.realizationCheck.dependenciesAreRealized(),
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.findApplications(app));
 };

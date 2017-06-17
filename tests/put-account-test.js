@@ -5,6 +5,7 @@ const config = require('config');
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
 const MongoHelper = require('./utils').MongoHelper;
 const newAccountEntry = require('./utils').newAccountEntry;
+const newTenantEntry = require('./utils').newTenantEntry;
 const assert = require('service-test-helpers').Assert;
 
 const verifyUpdateAccountOk = (expected, done) => {
@@ -32,14 +33,19 @@ describe('put-account-test', () => {
 
   let tenantUrl = config.test.tenantDbUrl;
   let serviceTestHelper = new ServiceTestHelper();
-  let mongoHelper = new MongoHelper('accounts', tenantUrl);
+  let accountMongoHelper = new MongoHelper('accounts', tenantUrl);
+  let tenantMongoHelper = new MongoHelper('tenants', tenantUrl);
 
   let accountEntry = newAccountEntry();
+  let tenantEntry = newTenantEntry();
 
   let clearTenantDB  = require('mocha-mongoose')(tenantUrl, { noClear: true });
 
   before((done) => {
-    mongoHelper.saveObject(accountEntry).then((saved) => {
+    tenantMongoHelper.saveObject(tenantEntry).then((savedTenant) => {
+      accountEntry.tenantId = savedTenant._id.toString();
+      return accountMongoHelper.saveObject(accountEntry);
+    }).then((saved) => {
       accountEntry.id = saved._id;
       return serviceTestHelper.startTestService('TenantService', {});
     }).then((service) => {

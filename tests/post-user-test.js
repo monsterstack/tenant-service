@@ -2,6 +2,7 @@
 const config = require('config');
 const HttpStatus = require('http-status');
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
+const MongoHelper = require('./utils').MongoHelper;
 
 const newUserEntry = require('./utils').newUserEntry;
 const newUserEntryMissingUsername = require('./utils').newUserEntryMissingUsername;
@@ -10,6 +11,9 @@ const newUserEntryMissingFirstname = require('./utils').newUserEntryMissingFirst
 const newUserEntryMissingLastname = require('./utils').newUserEntryMissingLastname;
 const newUserEntryMissingEmail = require('./utils').newUserEntryMissingEmail;
 const newUserEntryMissingPhone = require('./utils').newUserEntryMissingPhone;
+
+const newTenantEntry = require('./utils').newTenantEntry;
+const newAccountEntry = require('./utils').newAccountEntry;
 
 const assert = require('service-test-helpers').Assert;
 
@@ -36,9 +40,9 @@ const verifiySaveUserOk = (expected, done) => {
       assert.assertEquals(response.obj.phoneNumber, expected.phoneNumber,
          `Expected ${response.obj.phoneNumber} === ${expected.phoneNumber}`);
       assert.assertEquals(response.obj.accountId, expected.accountId,
-        `Expected ${response.obj.accountId} === ${expected.accountId}`);
+        `Expected Account Id ${response.obj.accountId} === ${expected.accountId}`);
       assert.assertEquals(response.obj.tenantId, expected.tenantId,
-        `Expected ${response.obj.tenantId} === ${expected.tenantId}`);
+        `Expected Tenant Id ${response.obj.tenantId} === ${expected.tenantId}`);
       done();
     } else {
       done(new Error('Expected 201 on save'));
@@ -80,11 +84,23 @@ describe('post-user-test', () => {
   let userEntryMissingEmail = newUserEntryMissingEmail();
   let userEntryMissingPhone = newUserEntryMissingPhone();
 
+  let tenantEntry = newTenantEntry();
+  let accountEntry = newAccountEntry();
+
   let tenantUrl = config.test.tenantDbUrl;
   let clearTenantDB  = require('mocha-mongoose')(tenantUrl, { noClear: true });
 
+  let accountMongoHelper = new MongoHelper('accounts', tenantUrl);
+  let tenantMongoHelper = new MongoHelper('tenants', tenantUrl);
+
   before((done) => {
-    serviceTestHelper.startTestService('TenantService', {}).then((service) => {
+    tenantMongoHelper.saveObject(tenantEntry).then((t) => {
+      userEntry.tenantId = t._id.toString();
+      return accountMongoHelper.saveObject(accountEntry);
+    }).then((a) => {
+      userEntry.accountId = a._id.toString();
+      return serviceTestHelper.startTestService('TenantService', {});
+    }).then((service) => {
       tenantService = service;
       done();
     }).catch((err) => {

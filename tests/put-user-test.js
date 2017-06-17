@@ -21,6 +21,9 @@ const newUserEntryInvalidFirstname = require('./utils').newUserEntryInvalidFirst
 const newUserEntryInvalidLastname = require('./utils').newUserEntryInvalidLastname;
 const changeUserField = require('./utils').changeUserField;
 
+const newTenantEntry = require('./utils').newTenantEntry;
+const newAccountEntry = require('./utils').newAccountEntry;
+
 const verifyUpdateUserOk = (expected, done) => {
   return (response) => {
     if (response.status === HttpStatus.OK && response.obj) {
@@ -81,7 +84,10 @@ const verifyUpdateUserBadRequest = (done) => {
 describe('put-user-test', () => {
   let tenantService = null;
   let tenantDbUrl = config.test.tenantDbUrl;
-  let mongoHelper = new MongoHelper('users', tenantDbUrl);
+  let userMongoHelper = new MongoHelper('users', tenantDbUrl);
+  let tenantMongoHelper = new MongoHelper('tenants', tenantDbUrl);
+  let accountMongoHelper = new MongoHelper('accounts', tenantDbUrl);
+
   let serviceTestHelper = new ServiceTestHelper();
 
   let clearTenantDB  = require('mocha-mongoose')(tenantDbUrl, { noClear: true });
@@ -99,9 +105,18 @@ describe('put-user-test', () => {
   let userEntryInvalidFirstname = newUserEntryInvalidFirstname();
   let userEntryInvalidLastname = newUserEntryInvalidLastname();
 
+  let tenantEntry = newTenantEntry();
+  let accountEntry = newAccountEntry();
+
   before((done) => {
     userEntry.password = md5(userEntry.password);
-    mongoHelper.saveObject(userEntry).then((savedUser) => {
+    tenantMongoHelper.saveObject(tenantEntry).then((savedTenant) => {
+      userEntry.tenantId = savedTenant._id.toString();
+      return accountMongoHelper.saveObject(accountEntry);
+    }).then((savedAccount) => {
+      userEntry.accountId = savedAccount._id.toString();
+      return userMongoHelper.saveObject(userEntry);
+    }).then((savedUser) => {
       userEntry.id = savedUser._id;
       return serviceTestHelper.startTestService('TenantService', {});
     }).then((service) => {
@@ -114,6 +129,9 @@ describe('put-user-test', () => {
 
   it('shall return 200 on user update-email', (done) => {
     let userEntryToUpdate = changeUserField(userEntry.id, newUserEntry(), 'email', 'myemail@email.com');
+    userEntryToUpdate.tenantId = tenantEntry._id.toString();
+    userEntryToUpdate.accountId = accountEntry._id.toString();
+
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryToUpdate };
       service.api.users.updateUser(request, verifyUpdateUserOk(userEntryToUpdate, done), verifyUpdateUserMissingError(done));
@@ -124,6 +142,8 @@ describe('put-user-test', () => {
 
   it('shall return 200 on user update-phoneNumber', (done) => {
     let userEntryToUpdate = changeUserField(userEntry.id, newUserEntry(), 'phoneNumber', '+19876543212');
+    userEntryToUpdate.tenantId = tenantEntry._id.toString();
+    userEntryToUpdate.accountId = accountEntry._id.toString();
 
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryToUpdate };
@@ -135,6 +155,8 @@ describe('put-user-test', () => {
 
   it('shall return 200 on user update-password', (done) => {
     let userEntryToUpdate = changeUserField(userEntry.id, newUserEntry(), 'password', md5('foobar'));
+    userEntryToUpdate.tenantId = tenantEntry._id.toString();
+    userEntryToUpdate.accountId = accountEntry._id.toString();
 
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryToUpdate };
@@ -146,6 +168,8 @@ describe('put-user-test', () => {
 
   it('shall return 200 on user update-role', (done) => {
     let userEntryToUpdate = changeUserField(userEntry.id, newUserEntry(), 'role', 'Admin');
+    userEntryToUpdate.tenantId = tenantEntry._id.toString();
+    userEntryToUpdate.accountId = accountEntry._id.toString();
 
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryToUpdate };
@@ -157,6 +181,8 @@ describe('put-user-test', () => {
 
   it('shall return 200 on user update-firstname', (done) => {
     let userEntryToUpdate = changeUserField(userEntry.id, newUserEntry(), 'firstname', 'Jose');
+    userEntryToUpdate.tenantId = tenantEntry._id.toString();
+    userEntryToUpdate.accountId = accountEntry._id.toString();
 
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryToUpdate };
@@ -168,6 +194,8 @@ describe('put-user-test', () => {
 
   it('shall return 200 on user update-lastname', (done) => {
     let userEntryToUpdate = changeUserField(userEntry.id, newUserEntry(), 'role', 'Aguire');
+    userEntryToUpdate.tenantId = tenantEntry._id.toString();
+    userEntryToUpdate.accountId = accountEntry._id.toString();
 
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryToUpdate };
@@ -180,6 +208,8 @@ describe('put-user-test', () => {
   it('shall return 200 on user update-username', (done) => {
     let userEntryToUpdate = changeUserField(userEntry.id, newUserEntry(), 'username', 'Axeman');
 
+    userEntryToUpdate.tenantId = tenantEntry._id.toString();
+    userEntryToUpdate.accountId = accountEntry._id.toString();
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryToUpdate };
       service.api.users.updateUser(request, verifyUpdateUserOk(userEntryToUpdate, done), verifyUpdateUserMissingError(done));

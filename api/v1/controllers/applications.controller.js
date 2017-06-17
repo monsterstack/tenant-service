@@ -7,7 +7,10 @@ const tenantModel = require('tenant-model').model;
 const ServiceError = require('core-server').ServiceError;
 const Application = tenantModel.Application;
 
-const ApplicationService = require(appRoot + '/libs/services/applicationService');
+const ApplicationService = require(appRoot + '/libs/services/applicationService').ApplicationService;
+const TenantService = require(appRoot + '/libs/services/tenantService').TenantService;
+const AccountService = require(appRoot + '/libs/services/accountService').AccountService;
+
 const Validator = require(appRoot + '/api/v1/validators/application.validator.js');
 
 /**
@@ -25,6 +28,8 @@ const saveApplication = (app) => {
     debugger;
     let application = req.body;
     let applicationService = new ApplicationService();
+    let tenantService = new TenantService();
+    let accountService = new AccountService();
     let validator = new Validator();
 
     let appName = application.name;
@@ -34,24 +39,37 @@ const saveApplication = (app) => {
 
     validator.validateNewApplication(req, application.locale).then((result) => {
       if (!result.isEmpty()) {
-        new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request', result.array()).writeResponse(res);
+        new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request', result.array());
       } else {
-        applicationService.findApplicationByName(appName).then((result) => {
-          if (result) {
-            res.status(HttpStatus.CONFLICT, 'An application with that name already exists');
-          } else {
-            applicationService.saveApplication(application).then((result) => {
-              res.status(HttpStatus.OK).send(result);
-            }).catch((err) => {
-              new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
-            });
-          }
-        }).catch((err) => {
-          new ServiceError(HttpStatus.OK, err.message).writeResponse(res);
-        });
+        return tenantService.findTenantById(application.tenantId);
+      }
+    }).then((tenant) => {
+      if (tenant) {
+        return accountService.findAccountById(application.accountId);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found can`t associate with app');
+      }
+    }).then((account) => {
+      if (account) {
+        return applicationService.findApplicationByName(application.name);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Account not found, unable to associate with app');
+      }
+    }).then((found) => {
+      if (found) {
+        throw new ServiceError(HttpStatus.CONFLICT, 'An application with that name already exists');
+      } else {
+        return applicationService.saveApplication(application);
+      }
+    }).then((savedApplication) => {
+      res.status(HttpStatus.OK).send(savedApplication);
+    }).catch((err) => {
+      if (err instanceof ServiceError) {
+        err.writeResponse(res);
+      } else {
+        new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
       }
     });
-
   };
 };
 
@@ -59,6 +77,9 @@ const updateApplication = (app) => {
   return (req, res) => {
     let application = req.body;
     let applicationService = new ApplicationService();
+    let tenantService = new TenantService();
+    let accountService = new AccountService();
+
     let validator = new Validator();
     let applicationName = application.name;
 
@@ -66,21 +87,35 @@ const updateApplication = (app) => {
 
     validator.validateApplication(req, application.locale).then((result) => {
       if (!result.isEmpty()) {
-        new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request').writeResponse(res);
+        throw new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request');
       } else {
-        applicationService.findApplicationById(application.id).then((result) => {
-          if (result) {
-            applicationService.updateApplication(application).then((result) => {
-              res.status(HttpStatus.OK).send(result);
-            }).catch((err) => {
-              new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
-            });
-          } else {
-            new ServiceError(HttpStatus.NOT_FOUND, 'Application not found').writeResponse(res);
-          }
-        }).catch((err) => {
-          new ServiceError(HttpStatus.OK, err.message).writeResponse(res);
-        });
+        return tenantService.findTenantById(application.tenantId);
+      }
+    }).then((tenant) => {
+      if (tenant) {
+        return accountService.findAccountById(application.accountId);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found can`t associate with app');
+      }
+    }).then((account) => {
+      if (account) {
+        return applicationService.findApplicationByName(application.name);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Account not found, unable to associate with app');
+      }
+    }).then((found) => {
+      if (found) {
+        return applicationService.updateApplication(application);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Application not found');
+      }
+    }).then((updatedApplication) => {
+      res.status(HttpStatus.OK).send(updatedApplication);
+    }).catch((err) => {
+      if (err instanceof ServiceError) {
+        err.writeResponse(res);
+      } else {
+        new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
       }
     });
   };
@@ -140,7 +175,41 @@ const getApplication = (app) => {
   };
 };
 
+/**
+ * Get Tenant By Api Key
+ * @Todo: Response always contains {} when 404
+ */
+const getApplicationByApiKey = (app) => {
+  return (req, res) => {
+    let apiKey = req.params.apiKey;
+    let applicationService = new ApplicationService();
+    let validator = new Validator();
+
+    // Try to find by apiKey
+    validator.validateApiKeyQuery(req).then((result) => {
+      if (!result.isEmpty()) {
+        throw new ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request', result.array());
+      } else {
+        return applicationService.findApplicationByApiKey(apiKey);
+      }
+    }).then((found) => {
+      if (found) {
+        res.status(HttpStatus.OK).send(found);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Application not found');
+      }
+    }).catch((err) => {
+      if (err instanceof ServiceError) {
+        err.writeResponse(res);
+      } else {
+        new ServiceError(HttpStatus.INTERNAL_SERVER_ERROR, err.message).writeResponse(res);
+      }
+    });
+  };
+};
+
 exports.saveApplication = saveApplication;
 exports.updateApplication = updateApplication;
 exports.getApplication = getApplication;
+exports.getApplicationByApiKey = getApplicationByApiKey;
 exports.findApplications = findApplications;

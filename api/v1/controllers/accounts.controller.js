@@ -7,6 +7,7 @@ const tenantModel = require('tenant-model').model;
 const ServiceError = require('core-server').ServiceError;
 
 const AccountService = require(appRoot + '/libs/services/accountService').AccountService;
+const TenantService = require(appRoot + '/libs/services/tenantService').TenantService;
 const Validator = require(appRoot + '/api/v1/validators/account.validator');
 
 const saveAccount = (app) => {
@@ -15,6 +16,7 @@ const saveAccount = (app) => {
 
     // Save it
     let accountService = new AccountService();
+    let tenantService = new TenantService();
     let validator = new Validator();
 
     account = validator.sanitize(account);
@@ -23,7 +25,13 @@ const saveAccount = (app) => {
       if (!result.isEmpty()) {
         throw ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request - Save Account', result.array());
       } else {
+        return tenantService.findTenantById(account.tenantId);
+      }
+    }).then((tenant) => {
+      if (tenant) {
         return accountService.findAccountByAccountNumber(account.accountNumber);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found, can`t associate with account');
       }
     }).then((foundAccount) => {
       if (foundAccount) {
@@ -48,6 +56,7 @@ const updateAccount = (app) => {
 
     // Update it
     let accountService = new AccountService();
+    let tenantService = new TenantService();
     let validator = new Validator();
 
     account = validator.sanitize(account);
@@ -56,7 +65,13 @@ const updateAccount = (app) => {
       if (!result.isEmpty()) {
         throw ServiceError(HttpStatus.BAD_REQUEST, 'Bad Request - Update Account', result.array());
       } else {
+        return tenantService.findTenantById(account.tenantId);
+      }
+    }).then((foundTenant) => {
+      if (foundTenant) {
         return accountService.findAccountById(account.id);
+      } else {
+        throw new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found, unable to associate with account');
       }
     }).then((foundAccount) => {
       if (foundAccount) {

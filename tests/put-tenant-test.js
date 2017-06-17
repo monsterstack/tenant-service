@@ -33,8 +33,8 @@ const verifyUpdateTenantOk = (expected, done) => {
       let tokenTestHelper = new TokenTestHelper();
       let decoded = tokenTestHelper.decodeSecret(response.obj.apiKey, response.obj.apiSecret);
       assert.assertEquals('Tenant', decoded.scope, `Expected ${decoded.scope} === Tenant`);
-      assert.assertEquals(response.obj.services[0], decoded.services[0], `Expected Service Count === ${decoded.services.length}`);
-      assert.assertEquals(response.obj.apiKey, decoded.apiKey, `Expected ${response.obj.apiKey} === ${decoded.apiKey}`);
+      assert.assertEquals('x-cdsp-tenant', decoded.agent, `Expected x-cdsp-tenant === ${decoded.agent}`);
+      assert.assertEquals('magic', decoded.auth, `Expected magic == ${decoded.auth}`);
       done();
     } else {
       done(new Error('Expected Http Status 200'));
@@ -60,7 +60,7 @@ describe('put-tenant-test', () => {
   let tokenTestHelper = new TokenTestHelper();
 
   tenantEntry.apiKey = uuid.v1();
-  tenantEntry.apiSecret = tokenTestHelper.codeSecret(tenantEntry, tenantEntry.apiKey);
+  tenantEntry.apiSecret = tokenTestHelper.codeTenantSecret(tenantEntry);
 
   let clearTenantDB  = require('mocha-mongoose')(tenantUrl, { noClear: true });
 
@@ -109,7 +109,7 @@ describe('put-tenant-test', () => {
       let tokenTestHelper = new TokenTestHelper();
       let tenantEntryToUpdate = changeField(tenantEntry.id, newTenantEntry(), 'timestamp', Date.now());
       tenantEntryToUpdate.apiKey = uuid.v1();
-      tenantEntryToUpdate.apiSecret = tokenTestHelper.codeSecret(tenantEntryToUpdate, tenantEntryToUpdate.apiKey);
+      tenantEntryToUpdate.apiSecret = tokenTestHelper.codeTenantSecret(tenantEntryToUpdate);
 
       let request = { 'x-fast-pass': true, tenant: tenantEntryToUpdate };
       service.api.tenants.updateTenant(request, verifyUpdateTenantOk(tenantEntryToUpdate, done), verifyUpdateTenantMissingError(done));

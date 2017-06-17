@@ -31,6 +31,11 @@ class ApplicationValidator extends Validator {
     return req.getValidationResult();
   }
 
+  validateApiKeyQuery(req) {
+    req.checkParams('apiKey', 'Api Key is required').notEmpty();
+    return req.getValidationResult();
+  }
+
   validateApplication(req, locale) {
     req.checkBody('id', 'Invalid id').notEmpty().isMongoId();
     return this.validateNewApplication(req, locale);

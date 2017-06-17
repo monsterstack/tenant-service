@@ -32,4 +32,4 @@ class TenantService {
   }
 }
 
-module.exports = TenantService;
+module.exports.TenantService = TenantService;

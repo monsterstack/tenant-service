@@ -3,7 +3,12 @@ const ApiBinding = require('discovery-proxy').ApiBinding;
 const assert = require('assert');
 
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
+const MongoHelper = require('./utils').MongoHelper;
+
 const newApplicationEntry = require('./utils').newApplicationEntry;
+const newAccountEntry = require('./utils').newAccountEntry;
+const newTenantEntry = require('./utils').newTenantEntry;
+
 const newSecurityDescriptor = require('./utils').newSecurityDescriptor;
 const sideLoadSecurityDescriptor = require('discovery-test-tools').sideLoadServiceDescriptor;
 
@@ -29,11 +34,24 @@ describe('post-application', (done) => {
     let tenantService = null;
     let tenantUrl = 'mongodb://localhost:27017/cdspTenant';
     let applicationEntry = newApplicationEntry();
+    let tenantEntry = newTenantEntry();
+    let accountEntry = newAccountEntry();
+
     let securityDescriptor = newSecurityDescriptor(SECURITY_PORT);
     let clearTenantDB  = require('mocha-mongoose')(tenantUrl, { noClear: true });
+
+    let tenantMongoHelper = new MongoHelper('tenants', tenantUrl);
+    let accountMongoHelper = new MongoHelper('accounts', tenantUrl);
+
     let serviceTestHelper = new ServiceTestHelper();
     before((done) => {
-      serviceTestHelper.startTestService('TenantService', {}).then((service) => {
+      tenantMongoHelper.saveObject(tenantEntry).then((savedTenant) => {
+        applicationEntry.tenantId = savedTenant._id.toString();
+        return accountMongoHelper.saveObject(accountEntry);
+      }).then((savedAccount) => {
+        applicationEntry.accountId = savedAccount._id.toString();
+        return serviceTestHelper.startTestService('TenantService', {});
+      }).then((service) => {
         tenantService = service;
         tenantService.getApp().dependencies = { types: ['SecurityService'] };
         return sideLoadSecurityDescriptor(tenantService, securityDescriptor);

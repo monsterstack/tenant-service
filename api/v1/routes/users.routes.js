@@ -40,7 +40,8 @@ module.exports = (app) => {
     *        schema:
     *          $ref: '#/definitions/Error'
     */
-  app.post('/api/v1/users', controller.saveUser(app));
+  app.post('/api/v1/users', app.realizationCheck.dependenciesAreRealized(),
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.saveUser(app));
 
   /**
     * @swagger
@@ -80,7 +81,8 @@ module.exports = (app) => {
     *        schema:
     *          $ref: '#/definitions/Error'
     */
-  app.put('/api/v1/users', controller.updateUser(app));
+  app.put('/api/v1/users', app.realizationCheck.dependenciesAreRealized(),
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.updateUser(app));
 
   /**
    * @swagger
@@ -118,5 +120,6 @@ module.exports = (app) => {
    *        schema:
    *          $ref: '#/definitions/Error'
    */
-  app.get('/api/v1/users/:id', controller.getUser(app));
+  app.get('/api/v1/users/:id', app.realizationCheck.dependenciesAreRealized(),
+          app.authCheck.fastPass(), app.authCheck.authCheck(), controller.getUser(app));
 };

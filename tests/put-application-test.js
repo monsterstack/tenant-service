@@ -6,6 +6,9 @@ const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
 const assert = require('service-test-helpers').Assert;
 
 const newApplicationEntry = require('./utils').newApplicationEntry;
+const newTenantEntry = require('./utils').newTenantEntry;
+const newAccountEntry = require('./utils').newAccountEntry;
+
 const MongoHelper = require('./utils').MongoHelper;
 
 const verifyUpdateApplicationOk = (done) => {
@@ -18,6 +21,8 @@ const verifyUpdateApplicationOk = (done) => {
       let decoded = tokenTestHelper.decodeSecret(response.obj.apiKey, response.obj.apiSecret);
       assert.assertEquals(response.obj.name, decoded.name, `Expected ${response.obj.name} === ${decoded.name}`);
       assert.assertEquals('Application', decoded.scope, `Expected Application === ${decoded.scope}`);
+      assert.assertEquals('x-cdsp-application', decoded.agent, `Expected x-cdsp-application === ${decoded.agent}`);
+      assert.assertEquals('magic', decoded.auth, `Expected magic == ${decoded.auth}`);
       done();
     } else {
       done(new Error('Expected 200 response on put of application'));
@@ -35,13 +40,23 @@ describe('put-application-test', () => {
   let tenantService = null;
   let tenantUrl = config.test.tenantDbUrl;
   let applicationEntry = newApplicationEntry();
+  let tenantEntry = newTenantEntry();
+  let accountEntry = newAccountEntry();
   let serviceTestHelper = new ServiceTestHelper();
-  let mongoHelper = new MongoHelper('applications', tenantUrl);
+  let applicationMongoHelper = new MongoHelper('applications', tenantUrl);
+  let accountMongoHelper = new MongoHelper('accounts', tenantUrl);
+  let tenantMongoHelper = new MongoHelper('tenants', tenantUrl);
 
   let clearTenantDB  = require('mocha-mongoose')(tenantUrl, { noClear: true });
 
   before((done) => {
-    mongoHelper.saveObject(applicationEntry).then((saved) => {
+    tenantMongoHelper.saveObject(tenantEntry).then((savedTenant) => {
+      applicationEntry.tenantId = savedTenant._id.toString();
+      return accountMongoHelper.saveObject(accountEntry);
+    }).then((savedAccount) => {
+      applicationEntry.accountId = accountEntry._id.toString();
+      return applicationMongoHelper.saveObject(applicationEntry);
+    }).then((saved) => {
       applicationEntry.id = saved._id;
       return serviceTestHelper.startTestService('TenantService', {});
     }).then((service) => {
