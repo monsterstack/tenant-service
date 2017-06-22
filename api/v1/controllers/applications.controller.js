@@ -11,7 +11,7 @@ const ApplicationService = require(appRoot + '/libs/services/applicationService'
 const TenantService = require(appRoot + '/libs/services/tenantService').TenantService;
 const AccountService = require(appRoot + '/libs/services/accountService').AccountService;
 
-const Validator = require(appRoot + '/api/v1/validators/application.validator.js');
+const Validator = require(appRoot + '/api/v1/validators/application.validator');
 
 /**
  * Build Page Descriptor
@@ -45,6 +45,8 @@ const saveApplication = (app) => {
       }
     }).then((tenant) => {
       if (tenant) {
+        // Adorn the application with a tenantName.
+        application.tenantName = tenant.name;
         return accountService.findAccountById(application.accountId);
       } else {
         throw new ServiceError(HttpStatus.NOT_FOUND, 'Tenant not found can`t associate with app');

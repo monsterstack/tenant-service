@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files --presets es2015,stage-2",
-    "test": "cd ./tests && mocha ./*-test.js --reporter nyan",
+    "test": "cd ./tests && nyc mocha ./*-test.js --reporter nyan",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "generateSwagger": "swagger-jsdoc -d ./api/swagger/info.js ./api/swagger/model-schema.js ./api/v1/routes/*.js && mv swagger.json ./api/swagger/swagger.json",
     "fixStyle": "jscs --fix app api libs tests",
     "checkStyle": "jscs app api libs tests --reporter unix",
@@ -64,12 +65,14 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.24.1",
+    "coveralls": "^2.13.1",
+    "data-test-helpers": "https://github.com/monsterstack/data-test-helpers#development",
     "discovery-test-tools": "https://github.com/monsterstack/discovery-test-tools#development",
     "mocha-better-spec-reporter": "^3.1.0",
     "mocha-mongoose": "1.2.0",
     "mongoose": "^4.8.4",
+    "nyc": "^11.0.2",
     "rimraf": "^2.6.1",
-    "service-test-helpers": "https://github.com/monsterstack/service-test-helpers#development",
-    "data-test-helpers": "https://github.com/monsterstack/data-test-helpers#development"
+    "service-test-helpers": "https://github.com/monsterstack/service-test-helpers#development"
   }
 }

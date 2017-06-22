@@ -34,16 +34,11 @@ describe('tenant-api-binding', () => {
     let apiBinding = new ApiBinding(service);
 
     apiBinding.bind().then((service) => {
-      if (service.api === undefined) {
-        done(new Error('Api is null'));
-      } else if (service.api.health === undefined) {
-        done(new Error('Health Api is null'));
-      } else if (service.api.tenants === undefined) {
-        done(new Error('Tenants Api is null'));
-      } else if (service.api.applications === undefined) {
-        done(new Error('Applications Api is null'));
-      } else {
+      if (service.api && service.api.health && service.api.tenants && service.api.applications
+          && service.api.accounts && service.api.users) {
         done();
+      } else {
+        done(new Error('Missing api - expected all of api, api.health, api.tenants, api.applications, api.accounts, and api.users'));
       }
     }).catch((err) => {
       done(err);

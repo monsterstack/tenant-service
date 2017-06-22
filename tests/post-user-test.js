@@ -50,7 +50,7 @@ const verifiySaveUserOk = (expected, done) => {
   };
 };
 
-const verifySaveUserMissingResponse = (done) => {
+const verifyMissingSaveUserResponse = (done) => {
   return (response) => {
     done(new Error('Expecting no sucessful response'));
   };
@@ -67,7 +67,7 @@ const verifySaveUserBadRequest = (done) => {
 
 };
 
-const verifySaveUserMissingError = (done) => {
+const verifyMissingSaveUserError = (done) => {
   return (err) => {
     done(err);
   };
@@ -111,7 +111,7 @@ describe('post-user-test', () => {
   it('shall return 201 on user post', (done) => {
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntry };
-      service.api.users.saveUser(request, verifiySaveUserOk(userEntry, done), verifySaveUserMissingError(done));
+      service.api.users.saveUser(request, verifiySaveUserOk(userEntry, done), verifyMissingSaveUserError(done));
     }).catch((err) => {
       done(err);
     });
@@ -120,7 +120,7 @@ describe('post-user-test', () => {
   it('shall return 400 on user post with missing username', (done) => {
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryMissingUsername };
-      service.api.users.saveUser(request, verifySaveUserMissingResponse(done), verifySaveUserBadRequest(done));
+      service.api.users.saveUser(request, verifyMissingSaveUserResponse(done), verifySaveUserBadRequest(done));
     }).catch((err) => {
       done(err);
     });
@@ -129,7 +129,7 @@ describe('post-user-test', () => {
   it('shall return 400 on user post with missing password', (done) => {
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryMissingPassword };
-      service.api.users.saveUser(request, verifySaveUserMissingResponse(done), verifySaveUserBadRequest(done));
+      service.api.users.saveUser(request, verifyMissingSaveUserResponse(done), verifySaveUserBadRequest(done));
     }).catch((err) => {
       done(err);
     });
@@ -138,7 +138,7 @@ describe('post-user-test', () => {
   it('shall return 400 on user post with missing firstname', (done) => {
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryMissingFirstname };
-      service.api.users.saveUser(request, verifySaveUserMissingResponse(done), verifySaveUserBadRequest(done));
+      service.api.users.saveUser(request, verifyMissingSaveUserResponse(done), verifySaveUserBadRequest(done));
     }).catch((err) => {
       done(err);
     });
@@ -147,7 +147,7 @@ describe('post-user-test', () => {
   it('shall return 400 on user post with missing lastname', (done) => {
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryMissingLastname };
-      service.api.users.saveUser(request, verifySaveUserMissingResponse(done), verifySaveUserBadRequest(done));
+      service.api.users.saveUser(request, verifyMissingSaveUserResponse(done), verifySaveUserBadRequest(done));
     }).catch((err) => {
       done(err);
     });
@@ -156,7 +156,7 @@ describe('post-user-test', () => {
   it('shall return 400 on user post with missing email', (done) => {
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryMissingEmail };
-      service.api.users.saveUser(request, verifySaveUserMissingResponse(done), verifySaveUserBadRequest(done));
+      service.api.users.saveUser(request, verifyMissingSaveUserResponse(done), verifySaveUserBadRequest(done));
     }).catch((err) => {
       done(err);
     });
@@ -165,7 +165,7 @@ describe('post-user-test', () => {
   it('shall return 400 on user post with missing phone', (done) => {
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, user: userEntryMissingPhone };
-      service.api.users.saveUser(request, verifySaveUserMissingResponse(done), verifySaveUserBadRequest(done));
+      service.api.users.saveUser(request, verifyMissingSaveUserResponse(done), verifySaveUserBadRequest(done));
     }).catch((err) => {
       done(err);
     });

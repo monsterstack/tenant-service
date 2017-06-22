@@ -1,6 +1,6 @@
 'use strict';
 const ApiBinding = require('discovery-proxy').ApiBinding;
-const assert = require('assert');
+const assert = require('service-test-helpers').Assert;
 
 const ServiceTestHelper = require('service-test-helpers').ServiceTestHelper;
 const MongoHelper = require('data-test-helpers').MongoHelper;
@@ -14,17 +14,32 @@ const sideLoadSecurityDescriptor = require('discovery-test-tools').sideLoadServi
 
 const SECURITY_PORT = 12616;
 
-const verifySavedApplicationResponse = (done) => {
+const verifySavedApplicationCreated = (done) => {
   return (response) => {
-    if (response.obj) {
+    if (response.obj && response.status === HttpStatus.CREATED) {
+      assert.assertFieldExists('tenantName', response.obj, `Expected application.tenantName exists`);
+      assert.assertFieldExists('apiKey', response.obj, `Expected application.apiKey exists`);
+      assert.assertFieldExists('apiSecret', response.obj, `Expected application.apiSecret exists`);
+      assert.assertFieldExists('scope', response.obj, `Expected application.scope exists`);
+      assert.assertFieldExists('accountId', response.obj, `Expected application.accountId exists`);
+      assert.assertFieldExists('tenantId', response.obj, `Expected application.tenantId exists`);
+      assert.assertFieldExists('timestamp', response.obj, `Expected application.timestamp exists`);
+
+      // Make sure the secret has the Tenant Name
+      let tokenTestHelper = new TokenTestHelper();
+      let decoded = tokenTestHelper.decodeSecret(response.obj.apiKey, response.obj.apiSecret);
+      assert.assertEquals(response.obj.name, decoded.name, `Expected ${response.obj.name} === ${decoded.name}`);
+      assert.assertEquals('Application', decoded.scope, `Expected Application === ${decoded.scope}`);
+      assert.assertEquals('x-cdsp-application', decoded.agent, `Expected x-cdsp-application === ${decoded.agent}`);
+      assert.assertEquals('magic', decoded.auth, `Expected magic == ${decoded.auth}`);
       done();
     } else {
-      done(new Error('Expecting saved application'));
+      done(new Error(`Expected 201 - Created`));
     }
   };
 };
 
-const verifySavedApplicationError = (done) => {
+const verifyMissingSavedApplicationError = (done) => {
   return (error) => {
     done(error);
   };
@@ -67,7 +82,7 @@ describe('post-application', (done) => {
             debugger;
             if (service) {
               let request = { 'x-fast-pass': true, application: applicationEntry };
-              service.api.applications.saveApplication(request, verifySavedApplicationResponse(done), verifySavedApplicationError(done));
+              service.api.applications.saveApplication(request, verifySavedApplicationCreated(done), verifyMissingSavedApplicationError(done));
             } else {
               done(new Error('Application Service Not Found'));
             }

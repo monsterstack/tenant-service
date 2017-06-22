@@ -20,7 +20,7 @@ const verifySavedAccountResponse = (done) => {
   };
 };
 
-const verifySavedAccountError = (done) => {
+const verifyMissingSavedAccountError = (done) => {
   return (error) => {
     done(error);
   };
@@ -41,7 +41,6 @@ describe('post-account-test', () => {
   let serviceTestHelper = new ServiceTestHelper();
 
   before((done) => {
-    console.log(tenantEntry);
     tenantMongoHelper.saveObject(tenantEntry).then((savedTenant) => {
       accountEntry.tenantId = savedTenant._id.toString();
       return serviceTestHelper.startTestService('TenantService', {});
@@ -59,7 +58,7 @@ describe('post-account-test', () => {
   it('should save account', (done) => {
     serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
       let request = { 'x-fast-pass': true, account: accountEntry };
-      service.api.accounts.saveAccount(request, verifySavedAccountResponse(done), verifySavedAccountError(done));
+      service.api.accounts.saveAccount(request, verifySavedAccountResponse(done), verifyMissingSavedAccountError(done));
     });
   });
 

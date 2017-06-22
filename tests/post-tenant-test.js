@@ -44,7 +44,7 @@ const verifySaveTenantCreated = (expected, done) => {
   };
 };
 
-const verifySaveTenantErrorMissing = (done) => {
+const verifyMissingSaveTenantError = (done) => {
   return (err) => {
     done(err);
   };
@@ -81,7 +81,7 @@ describe('post-tenant', (done) => {
         serviceTestHelper.bindToGenericService(tenantService.getApp().listeningPort).then((service) => {
             if (service) {
               let request = { 'x-fast-pass': true, tenant: tenantEntry };
-              service.api.tenants.saveTenant(request, verifySaveTenantCreated(tenantEntry, done), verifySaveTenantErrorMissing(done));
+              service.api.tenants.saveTenant(request, verifySaveTenantCreated(tenantEntry, done), verifyMissingSaveTenantError(done));
             } else {
               done(new Error('Tenant Service Not Found'));
             }
